@@ -66,12 +66,8 @@
       <label>Name (Required)</label>
       <input type="text" name="Name" required>
 
-      <!-- <label>Email (Required)</label>
-      <input type="email" name="Email" required> -->
-
       <label>Email (Required)</label>
-      <input type="text" name="Email" id="email" required>
-
+      <input type="email" name="Email" required>
 
       <!-- <label>RIN (Required)</label>
       <input type="text" name="RIN" required> -->
@@ -114,34 +110,6 @@
     </form>
 
   </div>
-
-
-  <script>
-  const form = document.querySelector("form");
-  const emailInput = document.querySelector('input[name="Email"]');
-  const rinInput = document.querySelector('input[name="RIN"]');
-
-  form.addEventListener("submit", function (e) {
-    const email = (emailInput.value || "").trim().toLowerCase();
-    const rin = (rinInput.value || "").trim();
-
-    // Enforce RPI email
-    if (!/^[a-z0-9._%+-]+@rpi\.edu$/.test(email)) {
-      e.preventDefault();
-      alert("Please use your RPI email address (must end with @rpi.edu).");
-      emailInput.focus();
-      return false;
-    }
-
-    // Enforce RIN format: 9 digits starting with 66
-    if (!/^66[0-9]{7}$/.test(rin)) {
-      e.preventDefault();
-      alert("RIN must be 9 digits and start with 66.");
-      rinInput.focus();
-      return false;
-    }
-  });
-</script>
 
 </body>
 </html>
