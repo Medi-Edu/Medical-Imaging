@@ -66,11 +66,30 @@
       <label>Name (Required)</label>
       <input type="text" name="Name" required>
 
-      <label>Email (Required)</label>
-      <input type="email" name="Email" required>
+      <!-- <label>Email (Required)</label>
+      <input type="email" name="Email" required> -->
+
+      <label>Email (Required — RPI Email)</label>
+      <input
+        type="email"
+        name="Email"
+        required
+        pattern="^[A-Za-z0-9._%+-]+@rpi\.edu$"
+        title="Please use your RPI email address (@rpi.edu)"
+      >
+
+
+      <!-- <label>RIN (Required)</label>
+      <input type="text" name="RIN" required> -->
 
       <label>RIN (Required)</label>
-      <input type="text" name="RIN" required>
+      <input
+        type="text"
+        name="RIN"
+        required
+        pattern="^66[0-9]{7}$"
+        title="RIN must be 9 digits and start with 66"
+      >
 
       <hr>
 
