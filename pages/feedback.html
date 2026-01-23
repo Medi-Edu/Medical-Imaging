@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Discussion and Feedback</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #000;
+    }
+    .container {
+      width: 650px;
+      margin: 50px auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #aaa;
+      font-size: 14px;
+    }
+    textarea {
+      height: 90px;
+    }
+    .checkbox-group {
+      margin-top: 8px;
+    }
+    button {
+      margin-top: 25px;
+      padding: 10px 25px;
+      background-color: #7f8a93;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Discussion and Feedback</h1>
+  <p>Please fill out the form below to share your feedback.</p>
+
+  <!-- ✅ Formspree endpoint -->
+  <form action="https://formspree.io/f/xjgygrkj" method="POST">
+
+    <!-- Main required fields -->
+    <label>Name (Required)</label>
+    <input type="text" name="Name" required placeholder="Enter Name">
+
+    <label>Email (Required)</label>
+    <input type="email" name="Email" required placeholder="Enter Your Email">
+
+    <label>RIN (Required)</label>
+    <input type="text" name="RIN" required placeholder="Enter RIN Number">
+
+    <label>Current Class / Subject</label>
+    <div class="checkbox-group">
+      <input type="checkbox" name="Class" value="Bioimaging and Bioinstrumentation">
+      Bioimaging and Bioinstrumentation<br>
+      <input type="checkbox" name="Class" value="Other">
+      Other
+    </div>
+
+    <label>Message</label>
+    <textarea name="Message" placeholder="Enter Your Message"></textarea>
+
+    <hr>
+
+    <!-- ALIVE reflection fields -->
+    <label>
+      1. In what situations did you use ALIVE?
+    </label>
+    <textarea name="ALIVE_Usage"></textarea>
+
+    <label>
+      2. Describe one interaction that was particularly helpful, and explain why.
+    </label>
+    <textarea name="ALIVE_Helpful"></textarea>
+
+    <label>
+      3. Describe one interaction that was confusing, unhelpful, or disappointing.
+    </label>
+    <textarea name="ALIVE_Confusing"></textarea>
+
+    <label>
+      4. Compared with traditional videos or lectures, how did ALIVE feel at this stage of the course?
+    </label>
+    <textarea name="ALIVE_Comparison"></textarea>
+
+    <button type="submit">Submit</button>
+
+  </form>
+</div>
+
+</body>
+</html>
