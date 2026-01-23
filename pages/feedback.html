@@ -1,109 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="html css_verticalspacer" lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <title>Discussion and Feedback</title>
+  <title>Feedback</title>
 
+  <!-- === Reuse existing site styles (IMPORTANT) === -->
+  <link rel="stylesheet" href="../css/site_global.css">
+  <link rel="stylesheet" href="../css/master_a-master.css">
+  <link rel="stylesheet" href="../css/index.css">
+
+  <!-- === Minimal page-specific styling === -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #000;
+    .feedback-container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 6px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
     }
-    .container {
-      width: 650px;
-      margin: 50px auto;
+
+    .feedback-container h1 {
+      margin-bottom: 10px;
     }
-    h1 {
-      text-align: center;
+
+    .feedback-container p {
+      margin-bottom: 20px;
     }
-    label {
-      font-weight: bold;
+
+    .feedback-container label {
       display: block;
-      margin-top: 15px;
+      font-weight: 600;
+      margin-top: 18px;
     }
-    input, textarea {
+
+    .feedback-container input,
+    .feedback-container textarea {
       width: 100%;
+      margin-top: 6px;
       padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #aaa;
       font-size: 14px;
+      font-family: inherit;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
     }
-    textarea {
-      height: 90px;
+
+    .feedback-container textarea {
+      min-height: 90px;
     }
-    .checkbox-group {
-      margin-top: 8px;
-    }
-    button {
-      margin-top: 25px;
-      padding: 10px 25px;
+
+    .feedback-container button {
+      margin-top: 28px;
+      padding: 10px 24px;
+      font-size: 15px;
       background-color: #7f8a93;
-      color: white;
+      color: #ffffff;
       border: none;
-      font-size: 16px;
+      border-radius: 4px;
       cursor: pointer;
+    }
+
+    .feedback-container button:hover {
+      opacity: 0.9;
+    }
+
+    .back-link {
+      margin-bottom: 15px;
+      display: inline-block;
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1>Discussion and Feedback</h1>
-  <p>Please fill out the form below to share your feedback.</p>
+  <!-- === Main content === -->
+  <div class="feedback-container">
 
-  <!-- ✅ Formspree endpoint -->
-  <form action="https://formspree.io/f/xjgygrkj" method="POST">
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
-    <!-- Main required fields -->
-    <label>Name (Required)</label>
-    <input type="text" name="Name" required placeholder="Enter Name">
+    <h1>Feedback</h1>
+    <p>
+      Please share your experience with the course and the ALIVE (Avatar-Lecture
+      Interactive Video Engine) system. Honest and thoughtful feedback is appreciated.
+    </p>
 
-    <label>Email (Required)</label>
-    <input type="email" name="Email" required placeholder="Enter Your Email">
+    <!-- === Formspree form === -->
+    <form action="https://formspree.io/f/xjgygrkj" method="POST">
 
-    <label>RIN (Required)</label>
-    <input type="text" name="RIN" required placeholder="Enter RIN Number">
+      <!-- Required fields -->
+      <label for="name">Name (Required)</label>
+      <input id="name" type="text" name="Name" required>
 
-    <label>Current Class / Subject</label>
-    <div class="checkbox-group">
-      <input type="checkbox" name="Class" value="Bioimaging and Bioinstrumentation">
-      Bioimaging and Bioinstrumentation<br>
-      <input type="checkbox" name="Class" value="Other">
-      Other
-    </div>
+      <label for="email">Email (Required)</label>
+      <input id="email" type="email" name="Email" required>
 
-    <label>Message</label>
-    <textarea name="Message" placeholder="Enter Your Message"></textarea>
+      <label for="rin">RIN (Required)</label>
+      <input id="rin" type="text" name="RIN" required>
 
-    <hr>
+      <hr>
 
-    <!-- ALIVE reflection fields -->
-    <label>
-      1. In what situations did you use ALIVE?
-    </label>
-    <textarea name="ALIVE_Usage"></textarea>
+      <!-- ALIVE reflection questions -->
+      <label for="alive_usage">
+        1. In what situations did you use ALIVE (e.g., previewing lectures, clarifying confusion, review)?
+      </label>
+      <textarea id="alive_usage" name="ALIVE_Usage"></textarea>
 
-    <label>
-      2. Describe one interaction that was particularly helpful, and explain why.
-    </label>
-    <textarea name="ALIVE_Helpful"></textarea>
+      <label for="alive_helpful">
+        2. Describe one interaction that was particularly helpful, and explain why.
+      </label>
+      <textarea id="alive_helpful" name="ALIVE_Helpful"></textarea>
 
-    <label>
-      3. Describe one interaction that was confusing, unhelpful, or disappointing.
-    </label>
-    <textarea name="ALIVE_Confusing"></textarea>
+      <label for="alive_confusing">
+        3. Describe one interaction that was confusing, unhelpful, or disappointing.
+      </label>
+      <textarea id="alive_confusing" name="ALIVE_Confusing"></textarea>
 
-    <label>
-      4. Compared with traditional videos or lectures, how did ALIVE feel at this stage of the course?
-    </label>
-    <textarea name="ALIVE_Comparison"></textarea>
+      <label for="alive_compare">
+        4. Compared with traditional videos or lectures, how did ALIVE feel at this stage of the course?
+      </label>
+      <textarea id="alive_compare" name="ALIVE_Comparison"></textarea>
 
-    <button type="submit">Submit</button>
+      <!-- Optional metadata (safe, invisible) -->
+      <input type="hidden" name="Course" value="Biomedical Instrumentation and Imaging">
+      <input type="hidden" name="System" value="ALIVE">
 
-  </form>
-</div>
+      <button type="submit">Submit Feedback</button>
+    </form>
+
+  </div>
 
 </body>
 </html>
