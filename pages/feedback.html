@@ -1,83 +1,59 @@
 <!DOCTYPE html>
-<html class="html css_verticalspacer" lang="en-US">
+<html lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <title>Feedback</title>
+  <title>Discussion and Feedback</title>
 
-  <!-- === Reuse existing site styles (IMPORTANT) === -->
-  <link rel="stylesheet" href="../css/site_global.css">
-  <link rel="stylesheet" href="../css/master_a-master.css">
-  <link rel="stylesheet" href="../css/index.css">
-
-  <!-- === Minimal page-specific styling === -->
   <style>
-    .feedback-container {
-      max-width: 960px;
-      margin: 40px auto;
-      padding: 30px;
-      background: #ffffff;
-      border-radius: 6px;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #000;
     }
-
-    .feedback-container h1 {
-      margin-bottom: 10px;
+    .container {
+      width: 650px;
+      margin: 50px auto;
     }
-
-    .feedback-container p {
-      margin-bottom: 20px;
+    h1 {
+      text-align: center;
     }
-
-    .feedback-container label {
+    label {
+      font-weight: bold;
       display: block;
-      font-weight: 600;
-      margin-top: 18px;
+      margin-top: 15px;
     }
-
-    .feedback-container input,
-    .feedback-container textarea {
+    input, textarea {
       width: 100%;
-      margin-top: 6px;
       padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #aaa;
       font-size: 14px;
-      font-family: inherit;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
     }
-
-    .feedback-container textarea {
-      min-height: 90px;
+    textarea {
+      height: 90px;
     }
-
-    .feedback-container button {
-      margin-top: 28px;
-      padding: 10px 24px;
-      font-size: 15px;
-      background-color: #7f8a93;
-      color: #ffffff;
+    hr {
+      margin: 25px 0;
       border: none;
-      border-radius: 4px;
+      border-top: 1px solid #ccc;
+    }
+    button {
+      margin-top: 25px;
+      padding: 10px 25px;
+      background-color: #7f8a93;
+      color: white;
+      border: none;
+      font-size: 16px;
       cursor: pointer;
-    }
-
-    .feedback-container button:hover {
-      opacity: 0.9;
-    }
-
-    .back-link {
-      margin-bottom: 15px;
-      display: inline-block;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- === Main content === -->
-  <div class="feedback-container">
+  <div class="container">
 
-    <a class="back-link" href="../index.html">← Back to Home</a>
+    <a href="../index.html">← Back to Home</a>
 
     <h1>Feedback</h1>
     <p>
@@ -85,43 +61,39 @@
       Interactive Video Engine) system. Honest and thoughtful feedback is appreciated.
     </p>
 
-    <!-- === Formspree form === -->
     <form action="https://formspree.io/f/xjgygrkj" method="POST">
 
-      <!-- Required fields -->
-      <label for="name">Name (Required)</label>
-      <input id="name" type="text" name="Name" required>
+      <label>Name (Required)</label>
+      <input type="text" name="Name" required>
 
-      <label for="email">Email (Required)</label>
-      <input id="email" type="email" name="Email" required>
+      <label>Email (Required)</label>
+      <input type="email" name="Email" required>
 
-      <label for="rin">RIN (Required)</label>
-      <input id="rin" type="text" name="RIN" required>
+      <label>RIN (Required)</label>
+      <input type="text" name="RIN" required>
 
       <hr>
 
-      <!-- ALIVE reflection questions -->
-      <label for="alive_usage">
-        1. In what situations did you use ALIVE (e.g., previewing lectures, clarifying confusion, review)?
+      <label>
+        1. In what situations did you use ALIVE?
       </label>
-      <textarea id="alive_usage" name="ALIVE_Usage"></textarea>
+      <textarea name="ALIVE_Usage"></textarea>
 
-      <label for="alive_helpful">
+      <label>
         2. Describe one interaction that was particularly helpful, and explain why.
       </label>
-      <textarea id="alive_helpful" name="ALIVE_Helpful"></textarea>
+      <textarea name="ALIVE_Helpful"></textarea>
 
-      <label for="alive_confusing">
+      <label>
         3. Describe one interaction that was confusing, unhelpful, or disappointing.
       </label>
-      <textarea id="alive_confusing" name="ALIVE_Confusing"></textarea>
+      <textarea name="ALIVE_Confusing"></textarea>
 
-      <label for="alive_compare">
+      <label>
         4. Compared with traditional videos or lectures, how did ALIVE feel at this stage of the course?
       </label>
-      <textarea id="alive_compare" name="ALIVE_Comparison"></textarea>
+      <textarea name="ALIVE_Comparison"></textarea>
 
-      <!-- Optional metadata (safe, invisible) -->
       <input type="hidden" name="Course" value="Biomedical Instrumentation and Imaging">
       <input type="hidden" name="System" value="ALIVE">
 
