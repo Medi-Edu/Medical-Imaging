@@ -4,55 +4,80 @@
   <meta charset="utf-8" />
   <title>Interactive Lecture</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:,">
 </head>
 <body>
+  <div class="container">
+    <!-- 🎬 Lecture Player -->
+    <video id="player" controls></video>
 
-<div class="container">
-  <!-- 🎬 Lecture Video -->
-  <video id="player" controls></video>
+    <!-- 💬 Modal for Q&A and Voice Interaction -->
+    <div id="qaModal" class="modal hidden">
+      <div class="modal-content">
 
-  <!-- 💬 Q&A Modal -->
-  <div id="qaModal" class="modal hidden">
-    <div class="modal-content">
-
-      <div class="tabs">
-        <button id="tabChat" class="active">💬 Text</button>
-        <button id="tabVoice">🎙️ Voice</button>
-        <button id="closeModal">✖</button>
-      </div>
-
-      <!-- Text Chat -->
-      <div id="chatPane">
-        <div id="chatLog"></div>
-        <div class="chatInput">
-          <input id="chatQ" placeholder="Ask about this moment…" />
-          <button id="sendBtn">Ask</button>
-        </div>
-      </div>
-
-      <!-- Voice -->
-      <div id="voicePane" class="hidden">
-
-        <div class="voiceControls">
-          <button id="recBtn">🎙️ Record</button>
-          <span id="recStatus">Idle</span>
+        <!-- Tabs -->
+        <div class="tabs">
+          <button id="tabChat" class="active">💬 Chat</button>
+          <button id="tabVoice">🎙️ Voice</button>
+          <button id="closeModal">✖ Close</button>
         </div>
 
-        <div class="avatarWrap">
-          <div class="avatar" id="avatar">
-            <img id="avatarImg" src="avatar1.png" />
+        <!-- Chat Pane -->
+        <div id="chatPane">
+          <div id="chatLog"></div>
+
+          <div class="chatInput">
+            <input id="chatQ" placeholder="Ask something about this moment…" />
+            <button id="sendBtn">Send</button>
+            <button id="sendAvatarBtn" title="Generate avatar video for the answer">Avatar</button>
           </div>
-          <div id="statusText">Idle</div>
+
+          <div style="opacity:.8;font-size:13px;margin-top:8px;">
+            Tip: Pause the lecture to ask. Your question includes the paused timestamp automatically.
+          </div>
+        </div>
+
+        <!-- Voice Pane -->
+        <div id="voicePane" class="hidden">
+          <div class="voiceControls">
+            <button id="recBtn">🎙️ Start Recording</button>
+            <span id="recStatus">Ready</span>
+          </div>
+
+          <!-- Avatar -->
+          <div class="avatarWrap">
+            <div class="avatar" id="avatar">
+              <img id="avatarImg" src="avatar1.png" alt="Assistant avatar" />
+              <div class="earwaves" aria-hidden="true"></div>
+            </div>
+            <div id="statusText" class="status">Idle</div>
+          </div>
+
+          <div class="tts-row" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+            <button id="speakStopBtn" class="danger">⏹ Stop</button>
+            <button id="speakResumeBtn">▶ Resume</button>
+            <audio id="ttsAudio" hidden></audio>
+          </div>
         </div>
 
       </div>
-
     </div>
   </div>
 
-</div>
+  <script src="app.js"></script>
 
-<script src="app.js"></script>
+  <script>
+    // Restore static avatar after avatarVideo ends
+    document.addEventListener("ended", (e) => {
+      if (e.target && e.target.id === "avatarVideo") {
+        const avatarDiv = document.getElementById("avatar");
+        avatarDiv.innerHTML = `
+          <img id="avatarImg" src="avatar1.png" alt="Assistant avatar" />
+          <div class="earwaves" aria-hidden="true"></div>
+        `;
+        document.getElementById("statusText").textContent = "Idle";
+      }
+    }, true);
+  </script>
 </body>
 </html>
-
