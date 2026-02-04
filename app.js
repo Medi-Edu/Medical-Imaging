@@ -1,138 +1,286 @@
 // ===============================
 // CONFIG
 // ===============================
-// const API_BASE = "http://h100-litjan2024.bme.rpi.edu:9000";
-// MUST be HTTPS
+// ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
 const API_BASE = "https://establishing-assignment-investigations-favor.trycloudflare.com";
 
+// Polling
+const POLL_MS = 1500;
 
+// Voice recording
+const RECORD_MS = 4500;
+
+// ===============================
+// HELPERS
+// ===============================
+function qs(id) { return document.getElementById(id); }
+
+function appendMsg(type, text) {
+  const div = document.createElement("div");
+  div.className = `msg ${type}`;
+  div.textContent = text;
+  qs("chatLog").appendChild(div);
+  qs("chatLog").scrollTop = qs("chatLog").scrollHeight;
+}
+
+function getVideoParam() {
+  const params = new URLSearchParams(window.location.search);
+  const v = params.get("video");
+  return v || "lecture01.mp4";
+}
+
+function getPausedTimeSeconds() {
+  const player = qs("player");
+  return player ? player.currentTime : null;
+}
+
+function setAvatarState(state, label) {
+  const avatar = qs("avatar");
+  avatar.classList.remove("listening", "thinking");
+  if (state) avatar.classList.add(state);
+  if (label) qs("statusText").textContent = label;
+}
 
 // ===============================
 // LOAD VIDEO
 // ===============================
-const params = new URLSearchParams(window.location.search);
-const videoFile = params.get("video");
+const player = qs("player");
+const videoFile = getVideoParam();
 
-const player = document.getElementById("player");
-player.src = `${API_BASE}/media/${videoFile}`;
+// video served by backend under /media (already mounted)
+// ✅ must be https base
+player.src = `${API_BASE}/media/${encodeURIComponent(videoFile)}`;
 
 // ===============================
 // MODAL CONTROL
 // ===============================
-const modal = document.getElementById("qaModal");
+const modal = qs("qaModal");
 
 player.addEventListener("pause", () => {
   modal.classList.remove("hidden");
 });
 
-document.getElementById("closeModal").onclick = () => {
+qs("closeModal").onclick = () => {
   modal.classList.add("hidden");
+  // resume playback is optional; comment out if you want to keep paused
+  // player.play();
 };
 
 // ===============================
 // TAB SWITCH
 // ===============================
-const chatPane = document.getElementById("chatPane");
-const voicePane = document.getElementById("voicePane");
+const chatPane = qs("chatPane");
+const voicePane = qs("voicePane");
 
-document.getElementById("tabChat").onclick = () => {
+qs("tabChat").onclick = () => {
   chatPane.classList.remove("hidden");
   voicePane.classList.add("hidden");
+  qs("tabChat").classList.add("active");
+  qs("tabVoice").classList.remove("active");
 };
 
-document.getElementById("tabVoice").onclick = () => {
+qs("tabVoice").onclick = () => {
   voicePane.classList.remove("hidden");
   chatPane.classList.add("hidden");
+  qs("tabVoice").classList.add("active");
+  qs("tabChat").classList.remove("active");
 };
 
 // ===============================
-// TEXT → AVATAR
+// FAST TEXT ANSWER (LLM) — /ask
 // ===============================
-document.getElementById("sendBtn").onclick = async () => {
-  const q = document.getElementById("chatQ").value.trim();
-  if (!q) return;
+async function askLLM(questionText) {
+  const payload = {
+    question: questionText,
+    current_time: getPausedTimeSeconds()
+  };
 
-  document.getElementById("statusText").textContent = "Thinking…";
-
-  const res = await fetch(`${API_BASE}/avatar_tts`, {
+  const r = await fetch(`${API_BASE}/ask`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: q })
+    body: JSON.stringify(payload)
   });
 
-  const data = await res.json();
-  pollAvatar(data.task_id);
-};
+  if (!r.ok) {
+    const t = await r.text();
+    throw new Error(`ask failed: ${r.status} ${t}`);
+  }
+  return await r.json(); // {answer, context}
+}
 
 // ===============================
-// VOICE RECORD
+// AVATAR JOB — /avatar_tts
+// IMPORTANT: send ANSWER text (not the question)
 // ===============================
-let recorder, audioChunks = [];
-
-document.getElementById("recBtn").onclick = async () => {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  recorder = new MediaRecorder(stream);
-  audioChunks = [];
-
-  recorder.ondataavailable = e => audioChunks.push(e.data);
-  recorder.onstop = sendVoice;
-
-  recorder.start();
-  document.getElementById("recStatus").textContent = "Recording…";
-
-  setTimeout(() => recorder.stop(), 4000);
-};
-
-async function sendVoice() {
-  document.getElementById("recStatus").textContent = "Processing…";
-
-  const blob = new Blob(audioChunks, { type: "audio/webm" });
-  const form = new FormData();
-  form.append("audio_file", blob, "audio.webm");
-
-  const r = await fetch(`${API_BASE}/transcribe`, {
+async function enqueueAvatarFromText(answerText) {
+  const r = await fetch(`${API_BASE}/avatar_tts`, {
     method: "POST",
-    body: form
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: answerText })
   });
 
-  const { text } = await r.json();
-  if (text) askText(text);
+  if (!r.ok) {
+    const t = await r.text();
+    throw new Error(`avatar_tts failed: ${r.status} ${t}`);
+  }
+  return await r.json(); // {task_id, status, job_id, audio_path}
 }
 
-function askText(text) {
-  document.getElementById("chatQ").value = text;
-  document.getElementById("sendBtn").click();
+async function pollJob(taskId) {
+  return new Promise((resolve, reject) => {
+    const timer = setInterval(async () => {
+      try {
+        const r = await fetch(`${API_BASE}/job_status/${taskId}`);
+        const data = await r.json();
+
+        if (data.state === "SUCCESS") {
+          clearInterval(timer);
+          resolve(data.result); // {video_url, wav_path, ...}
+        } else if (data.state === "FAILURE") {
+          clearInterval(timer);
+          reject(new Error(JSON.stringify(data)));
+        }
+      } catch (e) {
+        clearInterval(timer);
+        reject(e);
+      }
+    }, POLL_MS);
+  });
 }
 
-// ===============================
-// POLL AVATAR JOB
-// ===============================
-async function pollAvatar(taskId) {
-  const interval = setInterval(async () => {
-    const r = await fetch(`${API_BASE}/job_status/${taskId}`);
-    const data = await r.json();
-
-    if (data.state === "SUCCESS") {
-      clearInterval(interval);
-      playAvatar(data.result.video_url);
-    }
-  }, 3000);
-}
-
-// ===============================
-// PLAY AVATAR VIDEO
-// ===============================
-function playAvatar(url) {
-  const avatar = document.getElementById("avatar");
+function playAvatarVideo(videoUrl) {
+  const avatar = qs("avatar");
   avatar.innerHTML = `
-    <video id="avatarVideo" autoplay controls
-      src="${API_BASE}${url}">
+    <video id="avatarVideo" autoplay controls playsinline
+      src="${API_BASE}${videoUrl}">
     </video>
   `;
-  document.getElementById("statusText").textContent = "Speaking";
-
-  avatar.querySelector("video").onended = () => {
-    avatar.innerHTML = `<img src="avatar1.png" />`;
-    document.getElementById("statusText").textContent = "Idle";
-  };
+  qs("statusText").textContent = "Speaking";
 }
+
+// ===============================
+// CHAT: Send (FAST) + optional Avatar button
+// ===============================
+let lastAnswerText = null;
+
+qs("sendBtn").onclick = async () => {
+  const q = qs("chatQ").value.trim();
+  if (!q) return;
+
+  appendMsg("q", `Q: ${q}`);
+  qs("chatQ").value = "";
+
+  try {
+    qs("statusText").textContent = "Thinking…";
+    const data = await askLLM(q);
+    lastAnswerText = data.answer;
+    appendMsg("a", `A: ${data.answer}`);
+    qs("statusText").textContent = "Idle";
+  } catch (e) {
+    appendMsg("a", `Error: ${e.message}`);
+    qs("statusText").textContent = "Idle";
+  }
+};
+
+// Chat “Avatar” button: generate avatar for the last answer
+qs("sendAvatarBtn").onclick = async () => {
+  if (!lastAnswerText) {
+    appendMsg("a", "No answer yet — click Send first.");
+    return;
+  }
+  try {
+    setAvatarState("thinking", "Generating avatar…");
+    const job = await enqueueAvatarFromText(lastAnswerText);
+    const result = await pollJob(job.task_id);
+    setAvatarState(null, "Speaking");
+    playAvatarVideo(result.video_url);
+  } catch (e) {
+    setAvatarState(null, "Idle");
+    appendMsg("a", `Avatar error: ${e.message}`);
+  }
+};
+
+// Enter key sends chat
+qs("chatQ").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") qs("sendBtn").click();
+});
+
+// ===============================
+// VOICE: record -> /transcribe -> /ask -> /avatar_tts(answer)
+// ===============================
+let recorder = null;
+let audioChunks = [];
+
+qs("recBtn").onclick = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recorder = new MediaRecorder(stream);
+    audioChunks = [];
+
+    recorder.ondataavailable = (e) => audioChunks.push(e.data);
+
+    recorder.onstop = async () => {
+      try {
+        setAvatarState("listening", "Transcribing…");
+        qs("recStatus").textContent = "Transcribing…";
+
+        const blob = new Blob(audioChunks, { type: "audio/webm" });
+        const form = new FormData();
+        form.append("audio_file", blob, "audio.webm");
+
+        const tr = await fetch(`${API_BASE}/transcribe`, { method: "POST", body: form });
+        if (!tr.ok) throw new Error(`transcribe failed: ${tr.status}`);
+
+        const { text } = await tr.json();
+        if (!text) {
+          qs("recStatus").textContent = "No speech detected.";
+          setAvatarState(null, "Idle");
+          return;
+        }
+
+        appendMsg("q", `Q (voice): ${text}`);
+
+        setAvatarState("thinking", "Thinking…");
+        qs("recStatus").textContent = "Thinking…";
+        const ans = await askLLM(text);
+        lastAnswerText = ans.answer;
+        appendMsg("a", `A: ${ans.answer}`);
+
+        setAvatarState("thinking", "Generating avatar…");
+        qs("recStatus").textContent = "Generating avatar…";
+        const job = await enqueueAvatarFromText(ans.answer);
+
+        const result = await pollJob(job.task_id);
+        setAvatarState(null, "Speaking");
+        qs("recStatus").textContent = "Playing";
+        playAvatarVideo(result.video_url);
+
+      } catch (e) {
+        qs("recStatus").textContent = `Error: ${e.message}`;
+        setAvatarState(null, "Idle");
+      }
+    };
+
+    recorder.start();
+    qs("recStatus").textContent = "Recording…";
+    setAvatarState("listening", "Listening…");
+
+    // auto-stop after RECORD_MS
+    setTimeout(() => {
+      if (recorder && recorder.state === "recording") recorder.stop();
+    }, RECORD_MS);
+
+  } catch (e) {
+    qs("recStatus").textContent = `Mic error: ${e.message}`;
+  }
+};
+
+// Stop/Resume controls for avatar video (optional)
+qs("speakStopBtn").onclick = () => {
+  const v = document.getElementById("avatarVideo");
+  if (v) v.pause();
+};
+qs("speakResumeBtn").onclick = () => {
+  const v = document.getElementById("avatarVideo");
+  if (v) v.play();
+};
