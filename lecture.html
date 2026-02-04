@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Interactive Lecture</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 🎬 Lecture Video -->
+  <video id="player" controls></video>
+
+  <!-- 💬 Q&A Modal -->
+  <div id="qaModal" class="modal hidden">
+    <div class="modal-content">
+
+      <div class="tabs">
+        <button id="tabChat" class="active">💬 Text</button>
+        <button id="tabVoice">🎙️ Voice</button>
+        <button id="closeModal">✖</button>
+      </div>
+
+      <!-- Text Chat -->
+      <div id="chatPane">
+        <div id="chatLog"></div>
+        <div class="chatInput">
+          <input id="chatQ" placeholder="Ask about this moment…" />
+          <button id="sendBtn">Ask</button>
+        </div>
+      </div>
+
+      <!-- Voice -->
+      <div id="voicePane" class="hidden">
+
+        <div class="voiceControls">
+          <button id="recBtn">🎙️ Record</button>
+          <span id="recStatus">Idle</span>
+        </div>
+
+        <div class="avatarWrap">
+          <div class="avatar" id="avatar">
+            <img id="avatarImg" src="avatar1.png" />
+          </div>
+          <div id="statusText">Idle</div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
+
