@@ -1,7 +1,10 @@
 // ===============================
 // CONFIG
 // ===============================
-const API_BASE = "http://h100-litjan2024.bme.rpi.edu:9000";
+// const API_BASE = "http://h100-litjan2024.bme.rpi.edu:9000";
+// MUST be HTTPS
+const API_BASE = "https://establishing-assignment-investigations-favor.trycloudflare.com";
+
 
 
 // ===============================
