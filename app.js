@@ -153,10 +153,15 @@ qs("recBtn").onclick = async () => {
 
   micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  // 🔥 CRITICAL FIX
-  recorder = new MediaRecorder(micStream, {
-    mimeType: "audio/webm;codecs=opus"
-  });
+
+
+  let mimeType = "audio/webm;codecs=opus";
+   if (!MediaRecorder.isTypeSupported(mimeType)) {
+  mimeType = "audio/ogg;codecs=opus";
+}
+
+recorder = new MediaRecorder(micStream, { mimeType });
+
 
   audioChunks = [];
 
