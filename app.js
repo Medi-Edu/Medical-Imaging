@@ -148,15 +148,50 @@ async function pollJob(taskId) {
   });
 }
 
-function playAvatarVideo(videoUrl) {
+function playAvatarVideo(videoUrl, audioPath = null) {
   const avatar = qs("avatar");
+
   avatar.innerHTML = `
-    <video id="avatarVideo" autoplay controls playsinline
-      src="${API_BASE}${videoUrl}">
+    <video id="avatarVideo"
+           autoplay
+           controls
+           playsinline
+           src="${API_BASE}${videoUrl}">
     </video>
   `;
+
+  const v = document.getElementById("avatarVideo");
+
+  // 🔐 store cleanup info
+  lastAvatarCleanup = {
+    video_url: videoUrl,
+    audio_path: audioPath
+  };
+
   qs("statusText").textContent = "Speaking";
+
+  // ✅ cleanup AFTER playback finishes
+  v.addEventListener("ended", async () => {
+    qs("statusText").textContent = "Cleaning up…";
+
+    if (!lastAvatarCleanup) return;
+
+    try {
+      await fetch(`${API_BASE}/delete_video`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lastAvatarCleanup)
+      });
+      console.log("Cleanup success:", lastAvatarCleanup);
+    } catch (e) {
+      console.warn("Cleanup failed:", e);
+    } finally {
+      lastAvatarCleanup = null;
+      qs("statusText").textContent = "Idle";
+    }
+  });
 }
+
 
 // ===============================
 // CHAT: Send (FAST) + optional Avatar button
