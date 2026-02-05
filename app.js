@@ -290,7 +290,8 @@ qs("recBtn").onclick = async () => {
         setAvatarState("listening", "Transcribing…");
         qs("recStatus").textContent = "Transcribing…";
 
-        const blob = new Blob(audioChunks, { type: "audio/webm" });
+        const blob = new Blob(audioChunks, { type: recorder.mimeType });
+
         audioChunks = []; // important
 
         const form = new FormData();
