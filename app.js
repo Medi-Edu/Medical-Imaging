@@ -208,33 +208,60 @@ qs("chatQ").addEventListener("keydown", (e) => {
 // ===============================
 // VOICE: record -> /transcribe -> /ask -> /avatar_tts(answer)
 // ===============================
+// ===============================
+// VOICE: SAFE RECORDING PIPELINE
+// ===============================
 let recorder = null;
 let audioChunks = [];
+let recording = false;
+let processingVoice = false;
+let micStream = null;
 
 qs("recBtn").onclick = async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    recorder = new MediaRecorder(stream);
-    audioChunks = [];
+  if (recording || processingVoice) {
+    console.warn("Voice pipeline busy — ignoring click");
+    return;
+  }
 
-    recorder.ondataavailable = (e) => audioChunks.push(e.data);
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recorder = new MediaRecorder(micStream);
+    audioChunks = [];
+    recording = true;
+
+    recorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
 
     recorder.onstop = async () => {
+      recording = false;
+      processingVoice = true;
+
+      // 🔒 fully stop mic
+      micStream.getTracks().forEach(t => t.stop());
+      micStream = null;
+
       try {
         setAvatarState("listening", "Transcribing…");
         qs("recStatus").textContent = "Transcribing…";
 
         const blob = new Blob(audioChunks, { type: "audio/webm" });
+        audioChunks = []; // important
+
         const form = new FormData();
         form.append("audio_file", blob, "audio.webm");
 
-        const tr = await fetch(`${API_BASE}/transcribe`, { method: "POST", body: form });
+        const tr = await fetch(`${API_BASE}/transcribe`, {
+          method: "POST",
+          body: form
+        });
         if (!tr.ok) throw new Error(`transcribe failed: ${tr.status}`);
 
         const { text } = await tr.json();
-        if (!text) {
+        if (!text || text.trim().length < 2) {
           qs("recStatus").textContent = "No speech detected.";
           setAvatarState(null, "Idle");
+          processingVoice = false;
           return;
         }
 
@@ -249,8 +276,8 @@ qs("recBtn").onclick = async () => {
         setAvatarState("thinking", "Generating avatar…");
         qs("recStatus").textContent = "Generating avatar…";
         const job = await enqueueAvatarFromText(ans.answer);
-
         const result = await pollJob(job.task_id);
+
         setAvatarState(null, "Speaking");
         qs("recStatus").textContent = "Playing";
         playAvatarVideo(result.video_url);
@@ -258,6 +285,8 @@ qs("recBtn").onclick = async () => {
       } catch (e) {
         qs("recStatus").textContent = `Error: ${e.message}`;
         setAvatarState(null, "Idle");
+      } finally {
+        processingVoice = false;
       }
     };
 
@@ -267,11 +296,15 @@ qs("recBtn").onclick = async () => {
 
     // auto-stop after RECORD_MS
     setTimeout(() => {
-      if (recorder && recorder.state === "recording") recorder.stop();
+      if (recorder && recorder.state === "recording") {
+        recorder.stop();
+      }
     }, RECORD_MS);
 
   } catch (e) {
     qs("recStatus").textContent = `Mic error: ${e.message}`;
+    recording = false;
+    processingVoice = false;
   }
 };
 
