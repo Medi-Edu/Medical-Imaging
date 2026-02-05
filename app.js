@@ -148,13 +148,12 @@ async function pollJob(taskId) {
   });
 }
 
-function playAvatarVideo(videoUrl) {
+let lastAvatarCleanup = null;
+
 function playAvatarVideo(videoUrl, audioPath = null) {
   const avatar = qs("avatar");
 
   avatar.innerHTML = `
-    <video id="avatarVideo" autoplay controls playsinline
-      src="${API_BASE}${videoUrl}">
     <video id="avatarVideo"
            autoplay
            controls
@@ -165,7 +164,6 @@ function playAvatarVideo(videoUrl, audioPath = null) {
 
   const v = document.getElementById("avatarVideo");
 
-  // 🔐 store cleanup info
   lastAvatarCleanup = {
     video_url: videoUrl,
     audio_path: audioPath
@@ -173,7 +171,6 @@ function playAvatarVideo(videoUrl, audioPath = null) {
 
   qs("statusText").textContent = "Speaking";
 
-  // ✅ cleanup AFTER playback finishes
   v.addEventListener("ended", async () => {
     qs("statusText").textContent = "Cleaning up…";
 
@@ -185,7 +182,6 @@ function playAvatarVideo(videoUrl, audioPath = null) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(lastAvatarCleanup)
       });
-      console.log("Cleanup success:", lastAvatarCleanup);
     } catch (e) {
       console.warn("Cleanup failed:", e);
     } finally {
@@ -194,6 +190,7 @@ function playAvatarVideo(videoUrl, audioPath = null) {
     }
   });
 }
+
 
 
 // ===============================
