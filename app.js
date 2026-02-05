@@ -2,7 +2,7 @@
 // CONFIG
 // ===============================
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
-const API_BASE = "https://establishing-assignment-investigations-favor.trycloudflare.com";
+const API_BASE = "https://geographic-harvest-spa-repair.trycloudflare.com";
 
 // Polling
 const POLL_MS = 1500;
