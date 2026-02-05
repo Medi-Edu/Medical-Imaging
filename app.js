@@ -2,7 +2,7 @@
 // CONFIG
 // ===============================
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
-const API_BASE = "https://geographic-harvest-spa-repair.trycloudflare.com";
+const API_BASE = "https://stewart-franklin-broader-cosmetics.trycloudflare.com ";
 let lastAvatarCleanup = null;
 
 // Polling
