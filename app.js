@@ -259,14 +259,24 @@ qs("recBtn").onclick = async () => {
   }
 
   try {
-    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    recorder = new MediaRecorder(micStream);
-    audioChunks = [];
-    recording = true;
-
-    recorder.ondataavailable = (e) => {
-      if (e.data.size > 0) audioChunks.push(e.data);
-    };
+          micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          
+          // ✅ Force a stable, backend-friendly codec
+          const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+            ? "audio/webm;codecs=opus"
+            : "audio/webm";
+          
+          recorder = new MediaRecorder(micStream, { mimeType });
+          
+          audioChunks = [];
+          recording = true;
+          
+          recorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) {
+              audioChunks.push(e.data);
+            }
+          };
+          ;
 
     recorder.onstop = async () => {
       recording = false;
