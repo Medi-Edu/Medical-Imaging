@@ -3,7 +3,6 @@
 // ===============================
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
 const API_BASE = "https://stewart-franklin-broader-cosmetics.trycloudflare.com ";
-let lastAvatarCleanup = null;
 
 // Polling
 const POLL_MS = 1500;
@@ -150,48 +149,32 @@ async function pollJob(taskId) {
 }
 
 function playAvatarVideo(videoUrl, audioPath = null) {
-  const avatar = qs("avatar");
-
-  avatar.innerHTML = `
-    <video id="avatarVideo"
-           autoplay
-           controls
-           playsinline
-           src="${API_BASE}${videoUrl}">
+  qs("avatar").innerHTML = `
+    <video id="avatarVideo" autoplay controls playsinline
+      src="${API_BASE}${videoUrl}">
     </video>
   `;
 
-  const v = document.getElementById("avatarVideo");
-
-  // 🔐 store cleanup info
-  lastAvatarCleanup = {
-    video_url: videoUrl,
-    audio_path: audioPath
-  };
-
+  lastAvatarCleanup = { video_url: videoUrl, audio_path: audioPath };
   qs("statusText").textContent = "Speaking";
 
+  const v = qs("avatarVideo");
   v.addEventListener("ended", async () => {
     qs("statusText").textContent = "Cleaning up…";
-
     if (!lastAvatarCleanup) return;
 
     try {
       await fetch(`${API_BASE}/delete_video`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(lastAvatarCleanup)
+        body: JSON.stringify(lastAvatarCleanup),
       });
-      console.log("Cleanup success:", lastAvatarCleanup);
-    } catch (e) {
-      console.warn("Cleanup failed:", e);
     } finally {
       lastAvatarCleanup = null;
       qs("statusText").textContent = "Idle";
     }
   });
 }
-
 
 
 // ===============================
@@ -229,7 +212,7 @@ qs("sendAvatarBtn").onclick = async () => {
     const job = await enqueueAvatarFromText(lastAnswerText);
     const result = await pollJob(job.task_id);
     setAvatarState(null, "Speaking");
-    playAvatarVideo(result.video_url, result.wav_path);
+    playAvatarVideo(result.video_url);
     
   } catch (e) {
     setAvatarState(null, "Idle");
@@ -317,7 +300,7 @@ qs("recBtn").onclick = async () => {
 
         setAvatarState(null, "Speaking");
         qs("recStatus").textContent = "Playing";
-        playAvatarVideo(result.video_url, result.wav_path);
+        playAvatarVideo(result.video_url);
 
 
       } catch (e) {
