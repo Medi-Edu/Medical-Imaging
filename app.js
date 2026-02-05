@@ -4,15 +4,20 @@
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
 const API_BASE = "https://stewart-franklin-broader-cosmetics.trycloudflare.com";
 // ==================================================
+// ==================================================
 // CONSTANTS
 // ==================================================
-const POLL_MS = 1500;
-const RECORD_MS = 4500;
+const POLL_MS   = 1500;  // Job polling interval
+const RECORD_MS = 4500;  // Voice recording duration
 
-// ===============================
+
+
+// ==================================================
 // HELPERS
-// ===============================
-function qs(id) { return document.getElementById(id); }
+// ==================================================
+function qs(id) {
+  return document.getElementById(id);
+}
 
 function appendMsg(type, text) {
   const div = document.createElement("div");
@@ -20,6 +25,11 @@ function appendMsg(type, text) {
   div.textContent = text;
   qs("chatLog").appendChild(div);
   qs("chatLog").scrollTop = qs("chatLog").scrollHeight;
+}
+
+function getVideoParam() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("video") || "lecture01.mp4";
 }
 
 function getPausedTimeSeconds() {
@@ -30,92 +40,177 @@ function getPausedTimeSeconds() {
 function setAvatarState(state, label) {
   const avatar = qs("avatar");
   avatar.classList.remove("listening", "thinking");
+
   if (state) avatar.classList.add(state);
   if (label) qs("statusText").textContent = label;
 }
 
-// ===============================
-// LOAD LECTURE VIDEO
-// ===============================
-const player = qs("player");
-player.src = `${API_BASE}/media/lecture01.mp4`;
 
-// ===============================
-// ASK LLM
-// ===============================
+
+// ==================================================
+// VIDEO LOAD
+// ==================================================
+const player = qs("player");
+const videoFile = getVideoParam();
+
+// video served by backend under /media (HTTPS required)
+player.src = `${API_BASE}/media/${encodeURIComponent(videoFile)}`;
+
+
+
+// ==================================================
+// MODAL CONTROL
+// ==================================================
+const modal = qs("qaModal");
+
+player.addEventListener("pause", () => {
+  modal.classList.remove("hidden");
+});
+
+qs("closeModal").onclick = () => {
+  modal.classList.add("hidden");
+  // player.play(); // optional
+};
+
+
+
+// ==================================================
+// TAB SWITCHING
+// ==================================================
+const chatPane  = qs("chatPane");
+const voicePane = qs("voicePane");
+
+qs("tabChat").onclick = () => {
+  chatPane.classList.remove("hidden");
+  voicePane.classList.add("hidden");
+  qs("tabChat").classList.add("active");
+  qs("tabVoice").classList.remove("active");
+};
+
+qs("tabVoice").onclick = () => {
+  voicePane.classList.remove("hidden");
+  chatPane.classList.add("hidden");
+  qs("tabVoice").classList.add("active");
+  qs("tabChat").classList.remove("active");
+};
+
+
+
+// ==================================================
+// LLM QUERY — /ask
+// ==================================================
 async function askLLM(questionText) {
+  const payload = {
+    question: questionText,
+    current_time: getPausedTimeSeconds(),
+  };
+
   const r = await fetch(`${API_BASE}/ask`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      question: questionText,
-      current_time: getPausedTimeSeconds()
-    })
+    body: JSON.stringify(payload),
   });
 
-  if (!r.ok) throw new Error(await r.text());
+  if (!r.ok) {
+    const t = await r.text();
+    throw new Error(`ask failed: ${r.status} ${t}`);
+  }
+
   return await r.json(); // { answer, context }
 }
 
-// ===============================
-// AVATAR JOB
-// ===============================
+
+
+// ==================================================
+// AVATAR JOB — /avatar_tts
+// ==================================================
 async function enqueueAvatarFromText(answerText) {
   const r = await fetch(`${API_BASE}/avatar_tts`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: answerText })
+    body: JSON.stringify({ text: answerText }),
   });
 
-  if (!r.ok) throw new Error(await r.text());
-  return await r.json(); // { task_id, audio_path }
+  if (!r.ok) {
+    const t = await r.text();
+    throw new Error(`avatar_tts failed: ${r.status} ${t}`);
+  }
+
+  return await r.json(); // { task_id, ... }
 }
 
 async function pollJob(taskId) {
   return new Promise((resolve, reject) => {
     const timer = setInterval(async () => {
-      const r = await fetch(`${API_BASE}/job_status/${taskId}`);
-      const data = await r.json();
+      try {
+        const r = await fetch(`${API_BASE}/job_status/${taskId}`);
+        const data = await r.json();
 
-      if (data.state === "SUCCESS") {
+        if (data.state === "SUCCESS") {
+          clearInterval(timer);
+          resolve(data.result);
+        } else if (data.state === "FAILURE") {
+          clearInterval(timer);
+          reject(new Error(JSON.stringify(data)));
+        }
+      } catch (e) {
         clearInterval(timer);
-        resolve(data.result); // { video_url, wav_path }
-      }
-      if (data.state === "FAILURE") {
-        clearInterval(timer);
-        reject(data);
+        reject(e);
       }
     }, POLL_MS);
   });
 }
 
+
+
+// ==================================================
+// AVATAR VIDEO PLAYBACK + CLEANUP
+// ==================================================
 let lastAvatarCleanup = null;
 
-function playAvatarVideo(videoUrl, audioPath) {
-  qs("avatar").innerHTML = `
+function playAvatarVideo(videoUrl, audioPath = null) {
+  const avatar = qs("avatar");
+
+  avatar.innerHTML = `
     <video id="avatarVideo" autoplay controls playsinline
-      src="${API_BASE}${videoUrl}">
+           src="${API_BASE}${videoUrl}">
     </video>
   `;
 
-  lastAvatarCleanup = { video_url: videoUrl, audio_path: audioPath };
+  const v = qs("avatarVideo");
+
+  lastAvatarCleanup = {
+    video_url: videoUrl,
+    audio_path: audioPath,
+  };
+
   qs("statusText").textContent = "Speaking";
 
-  qs("avatarVideo").addEventListener("ended", async () => {
+  v.addEventListener("ended", async () => {
     qs("statusText").textContent = "Cleaning up…";
-    await fetch(`${API_BASE}/delete_video`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(lastAvatarCleanup)
-    });
-    lastAvatarCleanup = null;
-    qs("statusText").textContent = "Idle";
+
+    if (!lastAvatarCleanup) return;
+
+    try {
+      await fetch(`${API_BASE}/delete_video`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lastAvatarCleanup),
+      });
+    } catch (e) {
+      console.warn("Cleanup failed:", e);
+    } finally {
+      lastAvatarCleanup = null;
+      qs("statusText").textContent = "Idle";
+    }
   });
 }
 
-// ===============================
-// CHAT
-// ===============================
+
+
+// ==================================================
+// CHAT PIPELINE
+// ==================================================
 let lastAnswerText = null;
 
 qs("sendBtn").onclick = async () => {
@@ -125,89 +220,134 @@ qs("sendBtn").onclick = async () => {
   appendMsg("q", `Q: ${q}`);
   qs("chatQ").value = "";
 
-  const data = await askLLM(q);
-  lastAnswerText = data.answer;
-  appendMsg("a", `A: ${data.answer}`);
+  try {
+    qs("statusText").textContent = "Thinking…";
+    const data = await askLLM(q);
+    lastAnswerText = data.answer;
+    appendMsg("a", `A: ${data.answer}`);
+  } catch (e) {
+    appendMsg("a", `Error: ${e.message}`);
+  } finally {
+    qs("statusText").textContent = "Idle";
+  }
 };
 
 qs("sendAvatarBtn").onclick = async () => {
-  if (!lastAnswerText) return;
-  setAvatarState("thinking", "Generating avatar…");
+  if (!lastAnswerText) {
+    appendMsg("a", "No answer yet — click Send first.");
+    return;
+  }
 
-  const job = await enqueueAvatarFromText(lastAnswerText);
-  const result = await pollJob(job.task_id);
-  playAvatarVideo(result.video_url, result.wav_path);
+  try {
+    setAvatarState("thinking", "Generating avatar…");
+    const job = await enqueueAvatarFromText(lastAnswerText);
+    const result = await pollJob(job.task_id);
+    setAvatarState(null, "Speaking");
+    playAvatarVideo(result.video_url);
+  } catch (e) {
+    appendMsg("a", `Avatar error: ${e.message}`);
+    setAvatarState(null, "Idle");
+  }
 };
 
-// ===============================
-// 🎤 VOICE (FIXED)
-// ===============================
+qs("chatQ").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") qs("sendBtn").click();
+});
+
+
+
+// ==================================================
+// VOICE PIPELINE
+// ==================================================
 let recorder = null;
 let audioChunks = [];
-let micStream = null;
+let recording = false;
 let processingVoice = false;
+let micStream = null;
 
 qs("recBtn").onclick = async () => {
-  if (processingVoice) return;
-  processingVoice = true;
+  if (recording || processingVoice) return;
 
-  micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recorder = new MediaRecorder(micStream);
+    audioChunks = [];
+    recording = true;
 
+    recorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
 
+    recorder.onstop = async () => {
+      recording = false;
+      processingVoice = true;
+      micStream.getTracks().forEach(t => t.stop());
+      micStream = null;
 
-  let mimeType = "audio/webm;codecs=opus";
-   if (!MediaRecorder.isTypeSupported(mimeType)) {
-  mimeType = "audio/ogg;codecs=opus";
-}
+      try {
+        setAvatarState("listening", "Transcribing…");
+        qs("recStatus").textContent = "Transcribing…";
 
-recorder = new MediaRecorder(micStream, { mimeType });
+        const blob = new Blob(audioChunks, { type: "audio/webm" });
+        audioChunks = [];
 
+        const form = new FormData();
+        form.append("audio_file", blob, "audio.webm");
 
-  audioChunks = [];
+        const tr = await fetch(`${API_BASE}/transcribe`, {
+          method: "POST",
+          body: form,
+        });
 
-  recorder.ondataavailable = e => {
-    if (e.data.size > 0) audioChunks.push(e.data);
-  };
+        if (!tr.ok) throw new Error(`transcribe failed: ${tr.status}`);
 
-  recorder.onstop = async () => {
-    micStream.getTracks().forEach(t => t.stop());
+        const { text } = await tr.json();
+        if (!text || text.trim().length < 2) return;
 
-    const blob = new Blob(audioChunks, {
-      type: "audio/webm;codecs=opus"
-    });
+        appendMsg("q", `Q (voice): ${text}`);
 
-    const form = new FormData();
-    form.append("audio_file", blob, "audio.webm");
+        const ans = await askLLM(text);
+        lastAnswerText = ans.answer;
+        appendMsg("a", `A: ${ans.answer}`);
 
-    const tr = await fetch(`${API_BASE}/transcribe`, {
-      method: "POST",
-      body: form
-    });
+        const job = await enqueueAvatarFromText(ans.answer);
+        const result = await pollJob(job.task_id);
+        playAvatarVideo(result.video_url);
 
-    const { text } = await tr.json();
+      } catch (e) {
+        qs("recStatus").textContent = `Error: ${e.message}`;
+      } finally {
+        processingVoice = false;
+        setAvatarState(null, "Idle");
+      }
+    };
 
-    if (!text || text.length < 2) {
-      qs("recStatus").textContent = "No speech detected.";
-      processingVoice = false;
-      return;
-    }
+    recorder.start();
+    setAvatarState("listening", "Listening…");
+    qs("recStatus").textContent = "Recording…";
 
-    appendMsg("q", `Q (voice): ${text}`);
+    setTimeout(() => {
+      if (recorder && recorder.state === "recording") recorder.stop();
+    }, RECORD_MS);
 
-    const ans = await askLLM(text);
-    lastAnswerText = ans.answer;
-    appendMsg("a", `A: ${ans.answer}`);
-
-    const job = await enqueueAvatarFromText(ans.answer);
-    const result = await pollJob(job.task_id);
-    playAvatarVideo(result.video_url, result.wav_path);
-
+  } catch (e) {
+    qs("recStatus").textContent = `Mic error: ${e.message}`;
+    recording = false;
     processingVoice = false;
-  };
-
-  recorder.start();
-  qs("recStatus").textContent = "Recording…";
-
-  setTimeout(() => recorder.stop(), RECORD_MS);
+  }
 };
 
+
+
+// ==================================================
+// AVATAR PLAYBACK CONTROLS (OPTIONAL)
+// ==================================================
+qs("speakStopBtn").onclick = () => {
+  const v = qs("avatarVideo");
+  if (v) v.pause();
+};
+
+qs("speakResumeBtn").onclick = () => {
+  const v = qs("avatarVideo");
+  if (v) v.play();
+};
