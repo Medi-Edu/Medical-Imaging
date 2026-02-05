@@ -1,152 +1,173 @@
+/* =========================================================
+   ALIVE Lecture App Styles
+   Scoped to <body class="lecture-app">
+   ========================================================= */
+
 /* ---------- Base ---------- */
-body { 
-  font-family: system-ui, Arial; 
-  margin: 0; 
-  background: #0f172a; 
-  color: #e2e8f0; 
+body.lecture-app {
+  font-family: system-ui, Arial, sans-serif;
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
-.container { 
-  max-width: 1080px; 
-  margin: 24px auto; 
-  padding: 0 16px; 
+.lecture-app .container {
+  max-width: 1080px;
+  margin: 24px auto;
+  padding: 0 16px;
 }
 
-video { 
-  width: 100%; 
-  border-radius: 12px; 
-  box-shadow: 0 10px 30px rgba(0,0,0,.4); 
+.lecture-app video {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* ---------- Modal ---------- */
-.modal { 
-  position: fixed; 
-  inset: 0; 
-  background: rgba(0,0,0,.6); 
-  display: flex; 
-  align-items: center; 
+/* ---------- Modal Overlay ---------- */
+.lecture-app .modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 12px;                 /* ✅ prevents edge overflow on small screens */
+  padding: 12px;
+  z-index: 1000;
 }
 
-.hidden { display: none; }
+.lecture-app .hidden {
+  display: none !important;
+}
 
-/* ✅ Core fix: bounded height + internal scroll */
-.modal-content { 
+/* ---------- Modal Content ---------- */
+.lecture-app .modal-content {
   width: min(900px, 96vw);
-  max-height: 88vh;              /* ✅ critical: never full screen */
-  background: #111827; 
-  border-radius: 16px; 
-  padding: 16px; 
-  box-shadow: 0 10px 40px rgba(0,0,0,.6);
+  max-height: 88vh;
+  background: #111827;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+
   display: flex;
   flex-direction: column;
-  overflow: hidden;              /* ⛔ prevent outer overflow */
+  overflow: hidden; /* prevent outer scroll */
 }
 
 /* ---------- Tabs ---------- */
-.tabs { 
-  display: flex; 
-  gap: 8px; 
+.lecture-app .tabs {
+  display: flex;
+  gap: 8px;
   align-items: center;
-  flex-shrink: 0;                /* ✅ tabs never scroll away */
+  flex-shrink: 0;
 }
 
-.tabs button { 
-  background: #1f2937; 
-  color:#e5e7eb; 
-  padding: 8px 12px; 
-  border: none; 
-  border-radius: 8px; 
-  cursor: pointer; 
+.lecture-app .tabs button {
+  background: #1f2937;
+  color: #e5e7eb;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.tabs button.active { background: #374151; }
+.lecture-app .tabs button.active {
+  background: #374151;
+}
 
-#closeModal { 
-  margin-left: auto; 
-  background: #ef4444; 
+.lecture-app #closeModal {
+  margin-left: auto;
+  background: #ef4444;
+  color: #fff;
 }
 
 /* ---------- Content Panes ---------- */
-#chatPane,
-#voicePane {
-  flex: 1;                       /* ✅ fill remaining height */
-  overflow-y: auto;              /* ✅ internal scroll */
-  padding-right: 4px;            /* avoids scrollbar overlap */
+.lecture-app #chatPane,
+.lecture-app #voicePane {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 /* ---------- Chat ---------- */
-#chatLog { 
-  height: 220px;                 /* ✅ smaller for laptops */
-  overflow-y: auto; 
-  border: 1px solid #374151; 
-  border-radius: 8px; 
-  padding: 8px; 
-  margin: 12px 0; 
-  background:#0b1220; 
+.lecture-app #chatLog {
+  height: 220px;
+  overflow-y: auto;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 12px 0;
+  background: #0b1220;
 }
 
-.msg.q { color:#cbd5e1; margin-bottom: 6px; }
-.msg.a { color:#a7f3d0; margin-bottom: 10px; }
-
-.chatInput { 
-  display:flex; 
-  gap: 8px; 
+.lecture-app .msg.q {
+  color: #cbd5e1;
+  margin-bottom: 6px;
 }
 
-#chatQ { 
-  flex:1; 
-  padding: 10px; 
-  border-radius: 8px; 
-  border: 1px solid #334155; 
-  background:#0b1220; 
-  color:#e2e8f0; 
+.lecture-app .msg.a {
+  color: #a7f3d0;
+  margin-bottom: 10px;
+}
+
+.lecture-app .chatInput {
+  display: flex;
+  gap: 8px;
+}
+
+.lecture-app #chatQ {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0b1220;
+  color: #e2e8f0;
 }
 
 /* ---------- Voice ---------- */
-.voiceControls { 
-  display:flex; 
-  align-items:center; 
-  gap:12px; 
-  margin: 12px 0; 
+.lecture-app .voiceControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
 }
 
-/* ---------- Avatar block ---------- */
-.avatarWrap { 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
+/* ---------- Avatar Wrapper ---------- */
+.lecture-app .avatarWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 18px; 
+  gap: 18px;
   margin: 12px auto;
   width: 100%;
   max-width: 520px;
 }
 
-.status { 
-  opacity: 0.85; 
-  font-size: 14px; 
+.lecture-app .status {
+  opacity: 0.85;
+  font-size: 14px;
 }
 
 /* ---------- Avatar ---------- */
-.avatar {
+.lecture-app .avatar {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-width: 460px;              /* ✅ slightly smaller = fits laptops */
+  max-width: 460px;
   background: #000;
   border-radius: 12px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   margin: 0 auto;
 }
 
-.avatar img#avatarImg,
-.avatar video#avatarVideo {
+.lecture-app .avatar img#avatarImg,
+.lecture-app .avatar video#avatarVideo {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -157,70 +178,102 @@ video {
   transition: opacity 0.4s ease;
 }
 
-#avatarImg { opacity: 1; z-index: 1; }
-#avatarVideo { opacity: 1; z-index: 2; }
+.lecture-app #avatarImg {
+  opacity: 1;
+  z-index: 1;
+}
 
-/* ---------- Earwave animations ---------- */
-.earwaves::before,
-.earwaves::after {
-  content:""; 
-  position:absolute; 
-  right:-6px; 
-  top: 40%; 
-  width: 8px; 
-  height:8px; 
-  border-radius:50%;
-  background: #22c55e; 
-  opacity:0; 
+.lecture-app #avatarVideo {
+  opacity: 1;
+  z-index: 2;
+}
+
+/* ---------- Earwave Animations ---------- */
+.lecture-app .earwaves::before,
+.lecture-app .earwaves::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 40%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  opacity: 0;
   filter: blur(2px);
 }
 
-.avatar.listening .earwaves::before { animation: ping 1.2s ease-out infinite; }
-.avatar.listening .earwaves::after  { animation: ping 1.2s .4s ease-out infinite; }
-
-@keyframes ping {
-  0% { transform: scale(0.5); opacity: .7; }
-  100% { transform: scale(3); opacity: 0; }
+.lecture-app .avatar.listening .earwaves::before {
+  animation: ping 1.2s ease-out infinite;
 }
 
-/* ---------- Thinking pulse ---------- */
-.avatar.thinking { 
-  box-shadow: 0 0 0 0 rgba(59,130,246,.5); 
-  animation: thinkPulse 1.2s ease-in-out infinite; 
+.lecture-app .avatar.listening .earwaves::after {
+  animation: ping 1.2s 0.4s ease-out infinite;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* ---------- Thinking Pulse ---------- */
+.lecture-app .avatar.thinking {
+  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+  animation: thinkPulse 1.2s ease-in-out infinite;
 }
 
 @keyframes thinkPulse {
-  0% { box-shadow: 0 0 0 0 rgba(59,130,246,.55); }
-  100% { box-shadow: 0 0 0 12px rgba(59,130,246,0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+  }
 }
 
 /* ---------- Buttons ---------- */
-button.danger { background:#b91c1c; color:#fff; border:none; border-radius:8px; padding:8px 10px; }
-button.danger:hover { background:#7f1d1d; }
+.lecture-app button.danger {
+  background: #b91c1c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
 
-/* ---------- Responsive tweaks ---------- */
+.lecture-app button.danger:hover {
+  background: #7f1d1d;
+}
+
+/* ---------- Responsive Tweaks ---------- */
 @media (max-width: 768px) {
-  .modal-content {
+  .lecture-app .modal-content {
     max-height: 92vh;
     padding: 12px;
   }
 
-  #chatLog {
+  .lecture-app #chatLog {
     height: 180px;
   }
 
-  .avatar {
+  .lecture-app .avatar {
     max-width: 360px;
   }
 }
 
 @media (max-width: 480px) {
-  .tabs button {
+  .lecture-app .tabs button {
     padding: 6px 8px;
     font-size: 14px;
   }
 
-  .avatar {
+  .lecture-app .avatar {
     max-width: 300px;
   }
 }
