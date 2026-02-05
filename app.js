@@ -3,6 +3,7 @@
 // ===============================
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
 const API_BASE = "https://geographic-harvest-spa-repair.trycloudflare.com";
+let lastAvatarCleanup = null;
 
 // Polling
 const POLL_MS = 1500;
@@ -170,7 +171,6 @@ function playAvatarVideo(videoUrl, audioPath = null) {
 
   qs("statusText").textContent = "Speaking";
 
-  // ✅ cleanup AFTER playback finishes
   v.addEventListener("ended", async () => {
     qs("statusText").textContent = "Cleaning up…";
 
@@ -191,6 +191,7 @@ function playAvatarVideo(videoUrl, audioPath = null) {
     }
   });
 }
+
 
 
 // ===============================
@@ -228,7 +229,8 @@ qs("sendAvatarBtn").onclick = async () => {
     const job = await enqueueAvatarFromText(lastAnswerText);
     const result = await pollJob(job.task_id);
     setAvatarState(null, "Speaking");
-    playAvatarVideo(result.video_url);
+    playAvatarVideo(result.video_url, result.wav_path);
+    
   } catch (e) {
     setAvatarState(null, "Idle");
     appendMsg("a", `Avatar error: ${e.message}`);
@@ -315,7 +317,8 @@ qs("recBtn").onclick = async () => {
 
         setAvatarState(null, "Speaking");
         qs("recStatus").textContent = "Playing";
-        playAvatarVideo(result.video_url);
+        playAvatarVideo(result.video_url, result.wav_path);
+
 
       } catch (e) {
         qs("recStatus").textContent = `Error: ${e.message}`;
