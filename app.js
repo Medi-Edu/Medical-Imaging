@@ -8,7 +8,7 @@ const API_BASE = "https://incoming-basketball-ministries-cir.trycloudflare.com";
 const POLL_MS = 1500;
 
 // Voice recording
-const RECORD_MS = 30000;
+//const RECORD_MS = 30000;
 
 // ===============================
 // HELPERS
@@ -341,11 +341,17 @@ qs("recBtn").onclick = async () => {
     setAvatarState("listening", "Listening…");
 
     // auto-stop after RECORD_MS
-    setTimeout(() => {
-      if (recorder && recorder.state === "recording") {
-        recorder.stop();
-      }
-    }, RECORD_MS);
+  //  setTimeout(() => {
+    //  if (recorder && recorder.state === "recording") {
+      //  recorder.stop();
+     // }
+   // }, RECORD_MS);
+      qs("stopRecBtn").onclick = () => {
+        if (recorder && recorder.state === "recording") {
+          recorder.stop();
+          qs("recStatus").textContent = "Stopping…";
+        }
+      };  
 
   } catch (e) {
     qs("recStatus").textContent = `Mic error: ${e.message}`;
