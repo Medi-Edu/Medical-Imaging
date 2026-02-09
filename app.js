@@ -2,7 +2,7 @@
 // CONFIG
 // ===============================
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
-const API_BASE = "https://stewart-franklin-broader-cosmetics.trycloudflare.com";
+const API_BASE = "https://incoming-basketball-ministries-cir.trycloudflare.com";
 
 // Polling
 const POLL_MS = 1500;
