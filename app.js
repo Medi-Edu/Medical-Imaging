@@ -8,7 +8,7 @@ const API_BASE = "https://incoming-basketball-ministries-cir.trycloudflare.com";
 const POLL_MS = 1500;
 
 // Voice recording
-const RECORD_MS = 4500;
+const RECORD_MS = 30000;
 
 // ===============================
 // HELPERS
