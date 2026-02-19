@@ -2,7 +2,7 @@
 // CONFIG
 // ===============================
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
-const API_BASE = "https://acc-tree-represented-queries.trycloudflare.com";
+const API_BASE = "https://montgomery-bizrate-referrals-glance.trycloudflare.com";
 
 // Polling
 const POLL_MS = 1500;
