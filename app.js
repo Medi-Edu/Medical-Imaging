@@ -361,13 +361,11 @@ qs("recBtn").onclick = async () => {
       if (!recorder) return;
     
       if (recorder.state === "recording") {
-        // ✅ force final chunk to be emitted
-        recorder.requestData();
-    
-        // ✅ stop recorder (this triggers recorder.onstop, where you transcribe)
-        recorder.stop();
-    
         qs("recStatus").textContent = "Stopping…";
+        recorder.requestData();               // flush last chunk
+        setTimeout(() => recorder.stop(), 150); // small delay helps Chrome/Edge
+      } else {
+        qs("recStatus").textContent = "Not recording";
       }
     };
 
