@@ -309,19 +309,32 @@ qs("recBtn").onclick = async () => {
         });
         if (!tr.ok) throw new Error(`transcribe failed: ${tr.status}`);
 
+        // const { text } = await tr.json();
+        
+        // if (!text || text.trim().length < 2) {
+        //   qs("recStatus").textContent = "No speech detected.";
+        //   setAvatarState(null, "Idle");
+        //   processingVoice = false;
+        //   return;
+        // }
+
         const { text } = await tr.json();
-        if (!text || text.trim().length < 2) {
+
+        // ✅ Dedup safety net for Whisper hallucination
+        const uniqueText = [...new Set(text.split(/(?<=[.?!])\s+/))].join(" ").trim();
+    
+        if (!uniqueText || uniqueText.trim().length < 2) {
           qs("recStatus").textContent = "No speech detected.";
           setAvatarState(null, "Idle");
           processingVoice = false;
           return;
         }
-
-        appendMsg("q", `Q (voice): ${text}`);
+        
+        appendMsg("q", `Q (voice): ${uniqueText}`);
 
         setAvatarState("thinking", "Thinking…");
         qs("recStatus").textContent = "Thinking…";
-        const ans = await askLLM(text);
+        const ans = await askLLM(uniqueText);
         lastAnswerText = ans.answer;
         appendMsg("a", `A: ${ans.answer}`);
 
@@ -342,7 +355,7 @@ qs("recBtn").onclick = async () => {
       }
     };
 
-    recorder.start(100);
+    recorder.start();
     qs("recStatus").textContent = "Recording…";
     setAvatarState("listening", "Listening…");
   } catch (e) {
