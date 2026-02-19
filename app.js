@@ -358,20 +358,19 @@ qs("recBtn").onclick = async () => {
 
     // Update 
     qs("stopRecBtn").onclick = () => {
-    if (!recorder) return;
-  
-    if (recorder.state === "recording") {
-      recorder.ondataavailable = null;   // stop accumulating
-      recorder.stop();
-    }
-  
-    if (micStream) {
-      micStream.getTracks().forEach(t => t.stop());
-      micStream = null;
-    }
-  
-    qs("recStatus").textContent = "Stopped";
-  };
+      if (!recorder) return;
+    
+      if (recorder.state === "recording") {
+        // ✅ force final chunk to be emitted
+        recorder.requestData();
+    
+        // ✅ stop recorder (this triggers recorder.onstop, where you transcribe)
+        recorder.stop();
+    
+        qs("recStatus").textContent = "Stopping…";
+      }
+    };
+
 
     
 
