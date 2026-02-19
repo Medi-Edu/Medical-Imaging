@@ -283,9 +283,8 @@ qs("recBtn").onclick = async () => {
               audioChunks.push(e.data);
             }
           };
-          ;
-
-      recorder.onstop = async () => {
+      
+    recorder.onstop = async () => {
       recording = false;
       processingVoice = true;
 
