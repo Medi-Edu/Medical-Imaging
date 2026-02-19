@@ -348,19 +348,32 @@ qs("recBtn").onclick = async () => {
     recorder.start();
     qs("recStatus").textContent = "Recording…";
     setAvatarState("listening", "Listening…");
+    
+      // qs("stopRecBtn").onclick = () => {
+      //   if (recorder && recorder.state === "recording") {
+      //     recorder.stop();
+      //     qs("recStatus").textContent = "Stopping…";
+      //   }
+      // };  
 
-    // auto-stop after RECORD_MS
-  //  setTimeout(() => {
-    //  if (recorder && recorder.state === "recording") {
-      //  recorder.stop();
-     // }
-   // }, RECORD_MS);
-      qs("stopRecBtn").onclick = () => {
-        if (recorder && recorder.state === "recording") {
-          recorder.stop();
-          qs("recStatus").textContent = "Stopping…";
-        }
-      };  
+    // Update 
+    qs("stopRecBtn").onclick = () => {
+    if (!recorder) return;
+  
+    if (recorder.state === "recording") {
+      recorder.ondataavailable = null;   // stop accumulating
+      recorder.stop();
+    }
+  
+    if (micStream) {
+      micStream.getTracks().forEach(t => t.stop());
+      micStream = null;
+    }
+  
+    qs("recStatus").textContent = "Stopped";
+  };
+
+    
 
   } catch (e) {
     qs("recStatus").textContent = `Mic error: ${e.message}`;
