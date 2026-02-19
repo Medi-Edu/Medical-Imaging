@@ -349,28 +349,12 @@ qs("recBtn").onclick = async () => {
     qs("recStatus").textContent = "Recording…";
     setAvatarState("listening", "Listening…");
     
-      // qs("stopRecBtn").onclick = () => {
-      //   if (recorder && recorder.state === "recording") {
-      //     recorder.stop();
-      //     qs("recStatus").textContent = "Stopping…";
-      //   }
-      // };  
-
-    // Update 
-    qs("stopRecBtn").onclick = () => {
-      if (!recorder) return;
-    
-      if (recorder.state === "recording") {
-        qs("recStatus").textContent = "Stopping…";
-        recorder.requestData();               // flush last chunk
-        setTimeout(() => recorder.stop(), 150); // small delay helps Chrome/Edge
-      } else {
-        qs("recStatus").textContent = "Not recording";
-      }
-    };
-
-
-    
+      qs("stopRecBtn").onclick = () => {
+        if (recorder && recorder.state === "recording") {
+          recorder.stop();
+          qs("recStatus").textContent = "Stopping…";
+        }
+      };  
 
   } catch (e) {
     qs("recStatus").textContent = `Mic error: ${e.message}`;
