@@ -330,17 +330,6 @@ qs("recBtn").onclick = async () => {
           seen.add(key);
           return true;
         });
-        const words = text.trim().split(/\s+/);
-        const deduped = [];
-        let i = 0;
-        while (i < words.length) {
-          const chunk = words.slice(i, i + 5).join(" ");
-          if (!deduped.slice(-20).join(" ").includes(chunk)) {
-            deduped.push(words[i]);
-          }
-          i++;
-        }
-        const uniqueText = deduped.join(" ").trim();
         
         //const uniqueText = uniqueSentences.join(" ").trim();
         
