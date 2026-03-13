@@ -331,7 +331,7 @@ qs("recBtn").onclick = async () => {
           return true;
         });
         
-        //const uniqueText = uniqueSentences.join(" ").trim();
+        const uniqueText = uniqueSentences.join(" ").trim();
         
         if (!uniqueText || uniqueText.trim().length < 2) {
           qs("recStatus").textContent = "No speech detected.";
