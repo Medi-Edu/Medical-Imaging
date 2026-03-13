@@ -321,8 +321,17 @@ qs("recBtn").onclick = async () => {
         const { text } = await tr.json();
 
         // ✅ Dedup safety net for Whisper hallucination
-        const uniqueText = [...new Set(text.split(/(?<=[.?!])\s+/))].join(" ").trim();
-    
+        //const uniqueText = [...new Set(text.split(/(?<=[.?!])\s+/))].join(" ").trim();
+        const sentences = text.split(/(?<=[.?!])\s+/);
+        const seen = new Set();
+        const uniqueSentences = sentences.filter(s => {
+          const key = s.trim().toLowerCase().slice(0, 30);
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+        const uniqueText = uniqueSentences.join(" ").trim();
+        
         if (!uniqueText || uniqueText.trim().length < 2) {
           qs("recStatus").textContent = "No speech detected.";
           setAvatarState(null, "Idle");
