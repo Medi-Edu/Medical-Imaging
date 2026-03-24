@@ -2,7 +2,7 @@
 // CONFIG
 // ===============================
 // ✅ MUST be HTTPS when using GitHub Pages (HTTPS)
-const API_BASE = "https://ian-weed-keyboards-leeds.trycloudflare.com";
+const API_BASE = "https://see-that-exchanges-issues.trycloudflare.com";
 
 // Polling
 const POLL_MS = 1500;
