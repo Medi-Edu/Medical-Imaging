@@ -1,69 +1,13 @@
 // ===============================
 // CONFIG
 // ===============================
-// Read API_BASE from localStorage. If not set, show a one-time setup overlay.
-// Admin: run  localStorage.setItem('API_BASE','https://your-url.trycloudflare.com')
-// in the browser console to pre-set it for any machine.
+// When Cloudflare restarts and gives a new URL:
+//   1. Update the line below with the new URL
+//   2. cd ~/islamm11/alive/backend/Medical-Imaging
+//   3. git add app.js && git commit -m "update cloudflare url" && git push origin main
+//   4. Wait 60 seconds for GitHub Pages to rebuild — students refresh and it works
 
-function getApiBase() {
-  const stored = localStorage.getItem("API_BASE");
-  if (stored && stored.startsWith("https://")) return stored;
-  return null;
-}
-
-let API_BASE = getApiBase();
-
-if (!API_BASE) {
-  const overlay = document.createElement("div");
-  overlay.id = "apiSetupOverlay";
-  overlay.style.cssText = `
-    position:fixed;top:0;left:0;width:100%;height:100%;
-    background:rgba(10,20,40,0.93);z-index:9999;
-    display:flex;flex-direction:column;align-items:center;
-    justify-content:center;font-family:Arial,sans-serif;color:#fff;
-  `;
-  overlay.innerHTML = `
-    <div style="background:#1A3A5C;border-radius:12px;padding:36px 40px;
-                max-width:520px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
-      <h2 style="margin:0 0 8px;font-size:22px;">ALIVE System — Connect to Backend</h2>
-      <p style="margin:0 0 20px;font-size:14px;color:#A8C8E8;">
-        Enter the Cloudflare backend URL provided by your instructor.<br>
-        This is saved in your browser and only needs to be entered once per session.
-      </p>
-      <input id="apiBaseInput" type="text"
-        placeholder="https://xxxx-xxxx.trycloudflare.com"
-        style="width:100%;box-sizing:border-box;padding:10px 14px;
-               border-radius:6px;border:2px solid #2E6DA4;font-size:15px;
-               background:#0D2035;color:#fff;margin-bottom:16px;"/>
-      <button id="apiBaseSubmit"
-        style="width:100%;padding:11px;background:#2E6DA4;color:#fff;
-               border:none;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer;">
-        Connect
-      </button>
-      <p id="apiBaseError"
-         style="color:#FF8888;margin:10px 0 0;font-size:13px;display:none;">
-        Please enter a valid https:// URL.
-      </p>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-
-  document.getElementById("apiBaseSubmit").onclick = () => {
-    const val = document.getElementById("apiBaseInput").value.trim().replace(/\/$/, "");
-    if (!val.startsWith("https://")) {
-      document.getElementById("apiBaseError").style.display = "block";
-      return;
-    }
-    localStorage.setItem("API_BASE", val);
-    API_BASE = val;
-    overlay.remove();
-    initPlayer();
-  };
-
-  document.getElementById("apiBaseInput").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") document.getElementById("apiBaseSubmit").click();
-  });
-}
+const API_BASE = "https://harley-permitted-hints-moving.trycloudflare.com";
 
 // Polling interval for avatar job status
 const POLL_MS = 1500;
@@ -101,22 +45,12 @@ function setAvatarState(state, label) {
 // ===============================
 // LOAD VIDEO
 // ===============================
-// Only called after API_BASE is confirmed — prevents setting a dead src
-function initPlayer() {
+document.addEventListener("DOMContentLoaded", () => {
   const player    = qs("player");
   const videoFile = getVideoParam();
   player.src = `${API_BASE}/media/${encodeURIComponent(videoFile)}`;
   player.load();
-}
-
-// If API_BASE was already stored, init immediately
-if (API_BASE) {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initPlayer);
-  } else {
-    initPlayer();
-  }
-}
+});
 
 // ===============================
 // MODAL CONTROL
@@ -125,19 +59,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal  = qs("qaModal");
   const player = qs("player");
 
-  if (player) {
-    player.addEventListener("pause", () => {
-      modal.classList.remove("hidden");
-    });
-  }
+  player.addEventListener("pause", () => {
+    modal.classList.remove("hidden");
+  });
 
-  if (qs("closeModal")) {
-    qs("closeModal").onclick = () => modal.classList.add("hidden");
-  }
+  qs("closeModal").onclick = () => {
+    modal.classList.add("hidden");
+  };
+});
 
-  // ===============================
-  // TAB SWITCH
-  // ===============================
+// ===============================
+// TAB SWITCH
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
   const chatPane  = qs("chatPane");
   const voicePane = qs("voicePane");
 
@@ -159,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // ===============================
 // API CALLS
 // ===============================
-
 async function askLLM(questionText) {
   const r = await fetch(`${API_BASE}/ask`, {
     method: "POST",
@@ -239,7 +172,7 @@ function cleanTranscript(raw) {
   if (!raw || raw.trim().length < 2) return "";
   let text = raw.trim();
 
-  // Level 1: phrase-level (comma-separated repetitions, no punctuation between)
+  // Level 1: phrase-level (comma-separated repetitions)
   const phrases = text.split(/,\s+/);
   const seenPhrases = new Set();
   const dedupedPhrases = [];
@@ -251,7 +184,7 @@ function cleanTranscript(raw) {
   }
   text = dedupedPhrases.join(", ");
 
-  // Level 2: sentence-level (repeated sentences with punctuation between)
+  // Level 2: sentence-level (repeated sentences with punctuation)
   const sentences     = text.split(/(?<=[.?!])\s+/);
   const seenSentences = new Set();
   const dedupedSents  = [];
@@ -263,7 +196,7 @@ function cleanTranscript(raw) {
   }
   text = dedupedSents.join(" ");
 
-  // Level 3: n-gram repetition (paraphrased repetitions)
+  // Level 3: n-gram repetition detection
   const words = text.split(/\s+/);
   if (words.length > 12) {
     const ngramCount = {};
@@ -382,7 +315,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const blob = new Blob(audioChunks, { type: recorder.mimeType });
           audioChunks = [];
-
           const form = new FormData();
           form.append("audio_file", blob, "audio.webm");
 
