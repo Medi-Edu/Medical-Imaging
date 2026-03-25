@@ -1,72 +1,27 @@
 // ===============================
 // CONFIG
 // ===============================
-// Read API_BASE from localStorage. If not set, show a one-time setup overlay.
-// Admin: run  localStorage.setItem('API_BASE','https://your-url.trycloudflare.com')
-// in the browser console to pre-set it for any machine.
+// Update this URL each time Cloudflare restarts (Terminal E)
+// Edit directly on GitHub: https://github.com/Medi-Edu/Medical-Imaging/blob/main/app.js
+const API_BASE = "https://harley-permitted-hints-moving.trycloudflare.com";
 
-function getApiBase() {
-  const stored = localStorage.getItem("API_BASE");
-  if (stored && stored.startsWith("https://")) return stored;
-  return null;
-}
-
-let API_BASE = getApiBase();
-
-if (!API_BASE) {
-  const overlay = document.createElement("div");
-  overlay.id = "apiSetupOverlay";
-  overlay.style.cssText = `
-    position:fixed;top:0;left:0;width:100%;height:100%;
-    background:rgba(10,20,40,0.93);z-index:9999;
-    display:flex;flex-direction:column;align-items:center;
-    justify-content:center;font-family:Arial,sans-serif;color:#fff;
-  `;
-  overlay.innerHTML = `
-    <div style="background:#1A3A5C;border-radius:12px;padding:36px 40px;
-                max-width:520px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
-      <h2 style="margin:0 0 8px;font-size:22px;">ALIVE System — Connect to Backend</h2>
-      <p style="margin:0 0 20px;font-size:14px;color:#A8C8E8;">
-        Enter the Cloudflare backend URL provided by your instructor.<br>
-        This is saved in your browser and only needs to be entered once per session.
-      </p>
-      <input id="apiBaseInput" type="text"
-        placeholder="https://xxxx-xxxx.trycloudflare.com"
-        style="width:100%;box-sizing:border-box;padding:10px 14px;
-               border-radius:6px;border:2px solid #2E6DA4;font-size:15px;
-               background:#0D2035;color:#fff;margin-bottom:16px;"/>
-      <button id="apiBaseSubmit"
-        style="width:100%;padding:11px;background:#2E6DA4;color:#fff;
-               border:none;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer;">
-        Connect
-      </button>
-      <p id="apiBaseError"
-         style="color:#FF8888;margin:10px 0 0;font-size:13px;display:none;">
-        Please enter a valid https:// URL.
-      </p>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-
-  document.getElementById("apiBaseSubmit").onclick = () => {
-    const val = document.getElementById("apiBaseInput").value.trim().replace(/\/$/, "");
-    if (!val.startsWith("https://")) {
-      document.getElementById("apiBaseError").style.display = "block";
-      return;
-    }
-    localStorage.setItem("API_BASE", val);
-    API_BASE = val;
-    overlay.remove();
-    initPlayer();
-  };
-
-  document.getElementById("apiBaseInput").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") document.getElementById("apiBaseSubmit").click();
-  });
-}
-
-// Polling interval for avatar job status
 const POLL_MS = 1500;
+
+// ===============================
+// CONVERSATION HISTORY
+// ===============================
+// Keeps the last N turns (user + assistant) to send with each request.
+// This lets the LLM understand follow-up questions like "explain more".
+const MAX_HISTORY_TURNS = 3;   // = last 3 question+answer pairs
+let conversationHistory = [];  // [{ role: "user"|"assistant", content: "..." }]
+
+function addToHistory(role, content) {
+  conversationHistory.push({ role, content });
+  // Keep only last MAX_HISTORY_TURNS * 2 messages (user + assistant per turn)
+  if (conversationHistory.length > MAX_HISTORY_TURNS * 2) {
+    conversationHistory = conversationHistory.slice(-MAX_HISTORY_TURNS * 2);
+  }
+}
 
 // ===============================
 // HELPERS
@@ -101,22 +56,12 @@ function setAvatarState(state, label) {
 // ===============================
 // LOAD VIDEO
 // ===============================
-// Only called after API_BASE is confirmed — prevents setting a dead src
-function initPlayer() {
+document.addEventListener("DOMContentLoaded", () => {
   const player    = qs("player");
   const videoFile = getVideoParam();
   player.src = `${API_BASE}/media/${encodeURIComponent(videoFile)}`;
   player.load();
-}
-
-// If API_BASE was already stored, init immediately
-if (API_BASE) {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initPlayer);
-  } else {
-    initPlayer();
-  }
-}
+});
 
 // ===============================
 // MODAL CONTROL
@@ -125,19 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal  = qs("qaModal");
   const player = qs("player");
 
-  if (player) {
-    player.addEventListener("pause", () => {
-      modal.classList.remove("hidden");
-    });
-  }
+  player.addEventListener("pause", () => modal.classList.remove("hidden"));
+  qs("closeModal").onclick = () => modal.classList.add("hidden");
+});
 
-  if (qs("closeModal")) {
-    qs("closeModal").onclick = () => modal.classList.add("hidden");
-  }
-
-  // ===============================
-  // TAB SWITCH
-  // ===============================
+// ===============================
+// TAB SWITCH
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
   const chatPane  = qs("chatPane");
   const voicePane = qs("voicePane");
 
@@ -157,14 +97,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ===============================
-// API CALLS
+// API CALLS  (all include conversation_history)
 // ===============================
-
 async function askLLM(questionText) {
   const r = await fetch(`${API_BASE}/ask`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: questionText, current_time: getPausedTimeSeconds() })
+    body: JSON.stringify({
+      question:             questionText,
+      current_time:         getPausedTimeSeconds(),
+      conversation_history: conversationHistory,   // ← send history
+    })
   });
   if (!r.ok) throw new Error(`/ask failed: ${r.status} ${await r.text()}`);
   return r.json();
@@ -174,7 +117,11 @@ async function askLLMAvatar(questionText) {
   const r = await fetch(`${API_BASE}/ask_avatar`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: questionText, current_time: getPausedTimeSeconds() })
+    body: JSON.stringify({
+      question:             questionText,
+      current_time:         getPausedTimeSeconds(),
+      conversation_history: conversationHistory,   // ← send history
+    })
   });
   if (!r.ok) throw new Error(`/ask_avatar failed: ${r.status} ${await r.text()}`);
   return r.json();
@@ -239,7 +186,7 @@ function cleanTranscript(raw) {
   if (!raw || raw.trim().length < 2) return "";
   let text = raw.trim();
 
-  // Level 1: phrase-level (comma-separated repetitions, no punctuation between)
+  // Level 1: phrase-level comma-separated repetitions
   const phrases = text.split(/,\s+/);
   const seenPhrases = new Set();
   const dedupedPhrases = [];
@@ -251,7 +198,7 @@ function cleanTranscript(raw) {
   }
   text = dedupedPhrases.join(", ");
 
-  // Level 2: sentence-level (repeated sentences with punctuation between)
+  // Level 2: sentence-level repetitions
   const sentences     = text.split(/(?<=[.?!])\s+/);
   const seenSentences = new Set();
   const dedupedSents  = [];
@@ -263,7 +210,7 @@ function cleanTranscript(raw) {
   }
   text = dedupedSents.join(" ");
 
-  // Level 3: n-gram repetition (paraphrased repetitions)
+  // Level 3: n-gram repetition detection
   const words = text.split(/\s+/);
   if (words.length > 12) {
     const ngramCount = {};
@@ -283,10 +230,9 @@ function cleanTranscript(raw) {
 }
 
 // ===============================
-// CHAT: Send → /ask (detailed 3-5 sentence answer)
+// CHAT: Send → /ask (detailed answer + save to history)
 // ===============================
-let lastQuestion   = null;
-let lastAnswerText = null;
+let lastQuestion = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -296,10 +242,15 @@ document.addEventListener("DOMContentLoaded", () => {
     lastQuestion = q;
     appendMsg("q", `Q: ${q}`);
     qs("chatQ").value = "";
+
     try {
       qs("statusText").textContent = "Thinking…";
       const data = await askLLM(q);
-      lastAnswerText = data.answer;
+
+      // Save this turn to history BEFORE the next request
+      addToHistory("user",      q);
+      addToHistory("assistant", data.answer);
+
       appendMsg("a", `A: ${data.answer}`);
       qs("statusText").textContent = "Idle";
     } catch (e) {
@@ -309,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ===============================
-  // CHAT: Avatar button → /ask_avatar (short 1-2 sentence answer)
+  // CHAT: Avatar button → /ask_avatar (short answer)
   // ===============================
   qs("sendAvatarBtn").onclick = async () => {
     if (!lastQuestion) {
@@ -320,9 +271,11 @@ document.addEventListener("DOMContentLoaded", () => {
       setAvatarState("thinking", "Generating avatar answer…");
       const avatarData  = await askLLMAvatar(lastQuestion);
       const shortAnswer = avatarData.answer;
+
       setAvatarState("thinking", "Generating avatar video…");
       const job    = await enqueueAvatarFromText(shortAnswer);
       const result = await pollJob(job.task_id);
+
       setAvatarState(null, "Speaking");
       playAvatarVideo(result.video_url);
     } catch (e) {
@@ -382,7 +335,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const blob = new Blob(audioChunks, { type: recorder.mimeType });
           audioChunks = [];
-
           const form = new FormData();
           form.append("audio_file", blob, "audio.webm");
 
@@ -402,11 +354,15 @@ document.addEventListener("DOMContentLoaded", () => {
           appendMsg("q", `Q (voice): ${cleanedText}`);
           lastQuestion = cleanedText;
 
-          // Step 3: Short avatar answer via /ask_avatar
+          // Step 3: Short avatar answer via /ask_avatar (with history)
           setAvatarState("thinking", "Thinking…");
           qs("recStatus").textContent = "Thinking…";
           const avatarAns = await askLLMAvatar(cleanedText);
-          lastAnswerText  = avatarAns.answer;
+
+          // Save voice turn to history too
+          addToHistory("user",      cleanedText);
+          addToHistory("assistant", avatarAns.answer);
+
           appendMsg("a", `A: ${avatarAns.answer}`);
 
           // Step 4: Generate avatar video
