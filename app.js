@@ -3,7 +3,7 @@
 // ===============================
 // Update this URL each time Cloudflare restarts (Terminal E)
 // Edit directly on GitHub: https://github.com/Medi-Edu/Medical-Imaging/blob/main/app.js
-const API_BASE = "https://lenses-nominations-weekends-athletics.trycloudflare.com";
+const API_BASE = "https://list-detective-booth-small.trycloudflare.com";
 
 const POLL_MS = 1500;
 
