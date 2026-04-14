@@ -2,114 +2,987 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <title>Discussion and Feedback</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Feedback — ALIVE & BMED 2300</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --clr-bg: #f4f1ec;
+      --clr-surface: #ffffff;
+      --clr-primary: #1a3557;
+      --clr-accent: #c8401e;
+      --clr-accent-light: #f5ede9;
+      --clr-border: #d8d0c4;
+      --clr-text: #1c1c1c;
+      --clr-muted: #6b6560;
+      --clr-tag: #e8e2d9;
+      --radius: 6px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--clr-bg);
+      color: var(--clr-text);
+      min-height: 100vh;
     }
-    .container {
-      width: 650px;
-      margin: 50px auto;
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--clr-primary);
+      color: #fff;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
-    h1 {
+    .site-header .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .site-header .logo-mark {
+      width: 44px; height: 44px;
+      background: var(--clr-accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px; color: #fff; font-weight: normal;
+      flex-shrink: 0;
+    }
+    .site-header .brand-text { line-height: 1.2; }
+    .site-header .brand-text strong {
+      font-size: 15px; font-weight: 600; letter-spacing: 0.04em;
+      display: block; color: #e8dfd4;
+    }
+    .site-header .brand-text span { font-size: 12px; color: #a8bcd0; }
+    .site-header a {
+      color: #a8bcd0; font-size: 13px; text-decoration: none;
+      transition: color .2s;
+    }
+    .site-header a:hover { color: #fff; }
+
+    /* ── Hero Banner ── */
+    .hero {
+      background: linear-gradient(135deg, var(--clr-primary) 0%, #2b4f7a 100%);
+      color: #fff;
+      padding: 52px 32px 56px;
       text-align: center;
     }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
+    .hero .badge {
+      display: inline-block;
+      background: rgba(200,64,30,.25);
+      border: 1px solid rgba(200,64,30,.5);
+      color: #f2a98e;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 20px;
     }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #aaa;
-      font-size: 14px;
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: normal; line-height: 1.15;
+      margin-bottom: 14px;
     }
-    textarea {
-      height: 90px;
+    .hero p {
+      font-size: 15px; color: #c0d3e8; max-width: 560px;
+      margin: 0 auto 24px; line-height: 1.65;
     }
-    hr {
-      margin: 25px 0;
-      border: none;
-      border-top: 1px solid #ccc;
+    .hero .meta {
+      display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;
     }
-    button {
-      margin-top: 25px;
-      padding: 10px 25px;
-      background-color: #7f8a93;
-      color: white;
-      border: none;
-      font-size: 16px;
+    .hero .meta span {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.18);
+      font-size: 12px; padding: 4px 12px; border-radius: 20px;
+      color: #d4e4f4;
+    }
+
+    /* ── Layout ── */
+    .page-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* ── Section Selector ── */
+    .selector-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 28px;
+    }
+    .selector-card h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px; font-weight: normal;
+      color: var(--clr-primary); margin-bottom: 6px;
+    }
+    .selector-card .sub {
+      font-size: 13px; color: var(--clr-muted); margin-bottom: 20px;
+    }
+    .checkbox-options {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .checkbox-option {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius);
       cursor: pointer;
+      transition: border-color .2s, background .2s;
     }
+    .checkbox-option:hover { border-color: var(--clr-primary); background: #f0f4f8; }
+    .checkbox-option input[type="checkbox"] {
+      width: 18px; height: 18px; margin-top: 2px; cursor: pointer;
+      accent-color: var(--clr-primary); flex-shrink: 0;
+    }
+    .checkbox-option .opt-label strong {
+      font-size: 14px; font-weight: 600; color: var(--clr-text);
+      display: block; margin-bottom: 2px;
+    }
+    .checkbox-option .opt-label span {
+      font-size: 12px; color: var(--clr-muted);
+    }
+    .checkbox-option.selected {
+      border-color: var(--clr-primary);
+      background: #eef3f9;
+    }
+
+    /* ── Form Sections ── */
+    .form-section {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+      display: none;
+    }
+    .form-section.visible { display: block; }
+
+    .section-header {
+      background: var(--clr-primary);
+      color: #fff;
+      padding: 16px 28px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-header .part-badge {
+      background: var(--clr-accent);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px; border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .section-header h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17px; font-weight: normal;
+    }
+    .section-header p {
+      font-size: 11px; color: #a8bcd0; margin-top: 1px;
+    }
+
+    .section-body { padding: 28px; }
+
+    /* ── Question Block ── */
+    .question-block {
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--clr-tag);
+    }
+    .question-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+    .question-label {
+      display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px;
+    }
+    .q-num {
+      background: var(--clr-primary);
+      color: #fff; font-size: 11px; font-weight: 700;
+      padding: 2px 7px; border-radius: 3px;
+      margin-top: 3px; flex-shrink: 0;
+    }
+    .q-text {
+      font-size: 14px; line-height: 1.6; color: var(--clr-text); font-weight: 500;
+    }
+    .q-text .rev-tag {
+      display: inline-block;
+      background: #fef3cd; color: #7a5c00;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 1px 6px; border-radius: 3px;
+      margin-left: 6px; vertical-align: middle;
+    }
+
+    /* ── Likert Scale ── */
+    .likert-scale {
+      display: flex; gap: 0; width: 100%;
+      border: 1px solid var(--clr-border); border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .likert-scale label {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 10px 6px;
+      cursor: pointer;
+      border-right: 1px solid var(--clr-border);
+      transition: background .15s;
+      text-align: center;
+    }
+    .likert-scale label:last-child { border-right: none; }
+    .likert-scale input[type="radio"] { display: none; }
+    .likert-scale label:hover { background: #eef3f9; }
+    .likert-scale input[type="radio"]:checked + .likert-inner {
+      color: var(--clr-primary);
+    }
+    .likert-scale label:has(input:checked) { background: #dce9f5; }
+    .likert-inner { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .likert-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--clr-border);
+      transition: border-color .15s, background .15s;
+    }
+    .likert-scale label:hover .likert-dot { border-color: var(--clr-primary); }
+    .likert-scale label:has(input:checked) .likert-dot {
+      border-color: var(--clr-primary); background: var(--clr-primary);
+    }
+    .likert-num { font-size: 12px; font-weight: 700; color: var(--clr-muted); }
+    .likert-caption { font-size: 10px; color: var(--clr-muted); line-height: 1.2; }
+
+    .scale-ends {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--clr-muted); margin-top: 6px;
+      padding: 0 2px;
+    }
+
+    /* ── Radio Pills (multiple choice) ── */
+    .radio-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .radio-pill {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 14px;
+      border: 1.5px solid var(--clr-border);
+      border-radius: 20px; cursor: pointer;
+      font-size: 13px; transition: all .15s;
+    }
+    .radio-pill input { display: none; }
+    .radio-pill:hover { border-color: var(--clr-primary); color: var(--clr-primary); }
+    .radio-pill:has(input:checked) {
+      border-color: var(--clr-primary);
+      background: var(--clr-primary); color: #fff;
+    }
+
+    /* ── Textarea / Input ── */
+    .form-input, .form-textarea {
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 11px 14px;
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius);
+      background: #faf9f7;
+      color: var(--clr-text);
+      transition: border-color .2s;
+      display: block;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: #aaa; }
+    .form-input:focus, .form-textarea:focus {
+      outline: none; border-color: var(--clr-primary);
+      background: #fff;
+    }
+    .form-textarea { height: 100px; resize: vertical; }
+
+    .field-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+
+    .field-group { margin-bottom: 16px; }
+    .field-group label {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px; font-weight: 600; color: var(--clr-text);
+      margin-bottom: 7px;
+    }
+    .field-group label .req {
+      font-size: 11px; font-weight: 500; color: var(--clr-accent);
+    }
+
+    /* ── Identity section ── */
+    .identity-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+      display: none;
+    }
+    .identity-card.visible { display: block; }
+    .identity-card .section-header { background: #2b4f7a; }
+
+    /* ── Submit ── */
+    .submit-area {
+      display: none; text-align: center; padding-top: 10px;
+    }
+    .submit-area.visible { display: block; }
+
+    .submit-btn {
+      background: var(--clr-primary);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600;
+      padding: 14px 44px;
+      border: none; border-radius: var(--radius);
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background .2s, transform .1s;
+    }
+    .submit-btn:hover { background: #14294a; transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(0); }
+
+    .submit-note {
+      font-size: 12px; color: var(--clr-muted); margin-top: 12px;
+    }
+
+    /* ── Legend ── */
+    .scale-legend {
+      display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
+      padding: 10px 14px;
+      background: var(--clr-tag); border-radius: var(--radius);
+      font-size: 12px; color: var(--clr-muted);
+    }
+    .scale-legend span { display: flex; align-items: center; gap: 5px; }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* ── Success ── */
+    #success-msg {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    #success-msg .checkmark {
+      width: 64px; height: 64px; background: #1a3557;
+      border-radius: 50%; color: #fff; font-size: 28px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    #success-msg h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px; font-weight: normal; color: var(--clr-primary);
+      margin-bottom: 10px;
+    }
+    #success-msg p { font-size: 14px; color: var(--clr-muted); }
   </style>
 </head>
-
 <body>
 
-  <div class="container">
+<header class="site-header">
+  <div class="brand">
+    <div class="logo-mark">A</div>
+    <div class="brand-text">
+      <strong>ALIVE · BMED 2300</strong>
+      <span>Rensselaer Polytechnic Institute</span>
+    </div>
+  </div>
+  <a href="../index.html">← Back to Home</a>
+</header>
 
-    <a href="../index.html">← Back to Home</a>
+<div class="hero">
+  <div class="badge">Student Feedback Survey · Spring 2026</div>
+  <h1>Help Us Improve<br><em>AI in the Classroom</em></h1>
+  <p>Your honest and thoughtful responses directly shape the future of the ALIVE system and how it serves students at RPI. This survey is confidential.</p>
+  <div class="meta">
+    <span>BMED 2300</span>
+    <span>≈ 10–12 min</span>
+    <span>Evaluating AI in the Classroom</span>
+  </div>
+</div>
 
-    <h1>Feedback</h1>
-    <p>
-      Please share your experience with the course and the ALIVE (Avatar-Lecture
-      Interactive Video Engine) system. Honest and thoughtful feedback is appreciated.
-    </p>
+<div class="page-body">
 
-    <form action="https://formspree.io/f/xjgygrkj" method="POST">
-
-      <label>Name (Required)</label>
-      <input type="text" name="Name" required>
-
-      <label>Email (Required)</label>
-      <input type="email" name="Email" required>
-
-      <!-- <label>RIN (Required)</label>
-      <input type="text" name="RIN" required> -->
-
-      <label>RIN (Required)</label>
-      <input
-        type="text"
-        name="RIN"
-        required
-        pattern="^66[0-9]{7}$"
-        title="RIN must be 9 digits and start with 66"
-      >
-
-      <hr>
-
-      <label>
-        1. In what situations did you use ALIVE?
+  <!-- ── Section Selector ── -->
+  <div class="selector-card">
+    <h2>What would you like to provide feedback on?</h2>
+    <p class="sub">Select one or more options below. Your form will update automatically.</p>
+    <div class="checkbox-options">
+      <label class="checkbox-option" id="opt-alive">
+        <input type="checkbox" id="chk-alive" onchange="updateSections()">
+        <div class="opt-label">
+          <strong>ALIVE System Questionnaire</strong>
+          <span>Full 28-question survey covering usability, learning outcomes, trust, over-reliance, skill development, equity, and open feedback.</span>
+        </div>
       </label>
-      <textarea name="ALIVE_Usage"></textarea>
-
-      <label>
-        2. Describe one interaction that was particularly helpful, and explain why.
+      <label class="checkbox-option" id="opt-course">
+        <input type="checkbox" id="chk-course" onchange="updateSections()">
+        <div class="opt-label">
+          <strong>Bioimaging &amp; Bioinstrumentation Course</strong>
+          <span>General feedback on the course structure, instruction quality, and your overall learning experience in BMED 2300.</span>
+        </div>
       </label>
-      <textarea name="ALIVE_Helpful"></textarea>
-
-      <label>
-        3. Describe one interaction that was confusing, unhelpful, or disappointing.
+      <label class="checkbox-option" id="opt-other">
+        <input type="checkbox" id="chk-other" onchange="updateSections()">
+        <div class="opt-label">
+          <strong>Other / General Message</strong>
+          <span>Concerns, suggestions, or anything else you'd like to share with the research team.</span>
+        </div>
       </label>
-      <textarea name="ALIVE_Confusing"></textarea>
-
-      <label>
-        4. Compared with traditional videos or lectures, how did ALIVE feel at this stage of the course?
-      </label>
-      <textarea name="ALIVE_Comparison"></textarea>
-
-      <input type="hidden" name="Course" value="Biomedical Instrumentation and Imaging">
-      <input type="hidden" name="System" value="ALIVE">
-
-      <button type="submit">Submit Feedback</button>
-    </form>
-
+    </div>
   </div>
 
+  <!-- ── FORM ── -->
+  <form id="main-form" action="https://formspree.io/f/xjgygrkj" method="POST" onsubmit="handleSubmit(event)">
+    <input type="hidden" name="Course" value="BMED 2300 - Biomedical Instrumentation and Imaging">
+    <input type="hidden" name="System" value="ALIVE">
+    <input type="hidden" id="hidden-sections" name="FeedbackSections" value="">
+
+    <!-- ── Identity (shown when any section is checked) ── -->
+    <div class="identity-card" id="identity-card">
+      <div class="section-header">
+        <div class="part-badge">Info</div>
+        <div>
+          <h3>Your Information</h3>
+          <p>Name is optional · RIN and Email are required</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="field-row">
+          <div class="field-group">
+            <label>Name <span class="req">Optional</span></label>
+            <input class="form-input" type="text" name="Name" placeholder="Enter your name">
+          </div>
+          <div class="field-group">
+            <label>RIN <span class="req">Required</span></label>
+            <input class="form-input" type="text" name="RIN" required
+              pattern="^66[0-9]{7}$" title="RIN must be 9 digits and begin with 66"
+              placeholder="66XXXXXXX">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Email Address <span class="req">Required</span></label>
+          <input class="form-input" type="email" name="Email" required placeholder="you@rpi.edu">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ALIVE QUESTIONNAIRE SECTIONS ══ -->
+
+    <!-- Part A -->
+    <div class="form-section" id="sec-alive">
+      <div class="section-header">
+        <div class="part-badge">Part A</div>
+        <div>
+          <h3>Usability &amp; System Performance</h3>
+          <p>Q1–Q4 · Ease of use · Response speed · Frequency of use</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="scale-legend">
+          <span><span class="legend-dot" style="background:#1a3557"></span>1 = Low / Negative</span>
+          <span><span class="legend-dot" style="background:#4a7fbb"></span>3 = Neutral</span>
+          <span><span class="legend-dot" style="background:#c8401e"></span>5 = High / Positive</span>
+          <span>★ = Reverse-scored (higher = worse)</span>
+        </div>
+
+        <!-- Q1 -->
+        <div class="question-block">
+          <div class="question-label">
+            <span class="q-num">Q1</span>
+            <span class="q-text">How easy was the ALIVE system to use overall?</span>
+          </div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q1_Ease" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Very<br>Difficult</span></div></label>
+            <label><input type="radio" name="Q1_Ease" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Difficult</span></div></label>
+            <label><input type="radio" name="Q1_Ease" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q1_Ease" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Easy</span></div></label>
+            <label><input type="radio" name="Q1_Ease" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Very<br>Easy</span></div></label>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-block">
+          <div class="question-label">
+            <span class="q-num">Q2</span>
+            <span class="q-text">How would you rate the speed of ALIVE's responses when you asked a question?</span>
+          </div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q2_Speed" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Very<br>Slow</span></div></label>
+            <label><input type="radio" name="Q2_Speed" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Slow</span></div></label>
+            <label><input type="radio" name="Q2_Speed" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Acceptable</span></div></label>
+            <label><input type="radio" name="Q2_Speed" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Fast</span></div></label>
+            <label><input type="radio" name="Q2_Speed" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Very<br>Fast</span></div></label>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-block">
+          <div class="question-label">
+            <span class="q-num">Q3</span>
+            <span class="q-text">How frequently did you use the ALIVE Q&amp;A feature during this semester?</span>
+          </div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q3_Frequency" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Never</span></div></label>
+            <label><input type="radio" name="Q3_Frequency" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Rarely</span></div></label>
+            <label><input type="radio" name="Q3_Frequency" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Sometimes</span></div></label>
+            <label><input type="radio" name="Q3_Frequency" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Often</span></div></label>
+            <label><input type="radio" name="Q3_Frequency" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Always</span></div></label>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-block">
+          <div class="question-label">
+            <span class="q-num">Q4</span>
+            <span class="q-text">Which input method did you use most often when asking ALIVE a question?</span>
+          </div>
+          <div class="radio-pills">
+            <label class="radio-pill"><input type="radio" name="Q4_Modality" value="Typed text (chat)">Typed text (chat)</label>
+            <label class="radio-pill"><input type="radio" name="Q4_Modality" value="Spoken voice input">Spoken voice input</label>
+            <label class="radio-pill"><input type="radio" name="Q4_Modality" value="Both equally">Both equally</label>
+            <label class="radio-pill"><input type="radio" name="Q4_Modality" value="I did not use ALIVE">I did not use ALIVE</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part B -->
+    <div class="form-section" id="sec-alive-b">
+      <div class="section-header">
+        <div class="part-badge">Part B</div>
+        <div>
+          <h3>Learning Outcomes</h3>
+          <p>Q5–Q9 · Conceptual understanding · Homework · Exam preparation · Retention</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q5</span><span class="q-text">ALIVE was beneficial in improving my understanding of BMED 2300 concepts.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q5_Understanding" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q5_Understanding" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q5_Understanding" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q5_Understanding" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q5_Understanding" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q6</span><span class="q-text">ALIVE was helpful when working through homework problems and assignments.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q6_Homework" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q6_Homework" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q6_Homework" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q6_Homework" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q6_Homework" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q7</span><span class="q-text">ALIVE helped me prepare for exams by clarifying concepts I was unsure about.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q7_ExamPrep" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q7_ExamPrep" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q7_ExamPrep" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q7_ExamPrep" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q7_ExamPrep" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q8</span><span class="q-text">Being able to ask questions at the exact moment of confusion helped me retain course material better.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q8_Retention" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q8_Retention" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q8_Retention" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q8_Retention" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q8_Retention" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q9</span><span class="q-text">ALIVE's explanations helped me connect concepts across different topics in the course (e.g., linking CT principles to MRI).</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q9_Transfer" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q9_Transfer" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q9_Transfer" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q9_Transfer" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q9_Transfer" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part C -->
+    <div class="form-section" id="sec-alive-c">
+      <div class="section-header">
+        <div class="part-badge">Part C</div>
+        <div>
+          <h3>Trust &amp; Critical Thinking</h3>
+          <p>Q10–Q13 · Response trust · Answer verification · Critical evaluation</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q10</span><span class="q-text">How much do you trust the accuracy of the answers provided by ALIVE?</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q10_Trust" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Not at<br>all</span></div></label>
+            <label><input type="radio" name="Q10_Trust" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Slightly</span></div></label>
+            <label><input type="radio" name="Q10_Trust" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Moderately</span></div></label>
+            <label><input type="radio" name="Q10_Trust" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Mostly</span></div></label>
+            <label><input type="radio" name="Q10_Trust" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Completely</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q11</span><span class="q-text">I verified ALIVE's answers against the lecture slides, textbook, or other sources before relying on them.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q11_Verification" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Never</span></div></label>
+            <label><input type="radio" name="Q11_Verification" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Rarely</span></div></label>
+            <label><input type="radio" name="Q11_Verification" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Sometimes</span></div></label>
+            <label><input type="radio" name="Q11_Verification" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Often</span></div></label>
+            <label><input type="radio" name="Q11_Verification" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Always</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q12</span><span class="q-text">I accepted ALIVE's answers without questioning them, even when they seemed unclear. <span class="rev-tag">★ Reverse</span></span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q12_CriticalEval" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q12_CriticalEval" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q12_CriticalEval" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q12_CriticalEval" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q12_CriticalEval" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q13</span><span class="q-text">I was able to identify when an ALIVE response was incorrect or incomplete based on my course knowledge.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q13_ErrorDetect" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q13_ErrorDetect" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q13_ErrorDetect" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q13_ErrorDetect" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q13_ErrorDetect" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part D -->
+    <div class="form-section" id="sec-alive-d">
+      <div class="section-header">
+        <div class="part-badge">Part D</div>
+        <div>
+          <h3>Human Interaction &amp; Over-Reliance</h3>
+          <p>Q14–Q18 · Classroom attendance · Office hours · Independence</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q14</span><span class="q-text">Using ALIVE reduced how often I attended class, visited office hours, or participated in group discussions. <span class="rev-tag">★ Reverse</span></span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q14_HumanInteraction" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q14_HumanInteraction" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q14_HumanInteraction" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q14_HumanInteraction" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q14_HumanInteraction" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q15</span><span class="q-text">When I had a question about lecture content, my first instinct was to ask ALIVE rather than the professor or classmates.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q15_FirstInstinct" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q15_FirstInstinct" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q15_FirstInstinct" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q15_FirstInstinct" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q15_FirstInstinct" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q16</span><span class="q-text">When you had a question about course content, what did you do FIRST?</span></div>
+          <div class="radio-pills">
+            <label class="radio-pill"><input type="radio" name="Q16_FirstAction" value="Ask ALIVE">Ask ALIVE</label>
+            <label class="radio-pill"><input type="radio" name="Q16_FirstAction" value="Ask the professor">Ask the professor</label>
+            <label class="radio-pill"><input type="radio" name="Q16_FirstAction" value="Go to office hours">Go to office hours</label>
+            <label class="radio-pill"><input type="radio" name="Q16_FirstAction" value="Ask a classmate">Ask a classmate</label>
+            <label class="radio-pill"><input type="radio" name="Q16_FirstAction" value="Search online">Search online</label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q17</span><span class="q-text">I was still able to understand and work through course problems on my own, without using ALIVE. <span class="rev-tag">★ Reverse</span></span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q17_Independence" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q17_Independence" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q17_Independence" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q17_Independence" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q17_Independence" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q18</span><span class="q-text">I used ALIVE primarily as a shortcut to get answers quickly rather than as a tool to deepen my understanding. <span class="rev-tag">★ Reverse</span></span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q18_Shortcut" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q18_Shortcut" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q18_Shortcut" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q18_Shortcut" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q18_Shortcut" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part E -->
+    <div class="form-section" id="sec-alive-e">
+      <div class="section-header">
+        <div class="part-badge">Part E</div>
+        <div>
+          <h3>Skill Development &amp; Academic Integrity</h3>
+          <p>Q19–Q21 · Core skill impact · Transparency · Appropriate use</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q19</span><span class="q-text">ALIVE helped strengthen my problem-solving and analytical reasoning skills for medical imaging topics.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q19_ProblemSolving" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q19_ProblemSolving" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q19_ProblemSolving" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q19_ProblemSolving" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q19_ProblemSolving" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q20</span><span class="q-text">I used ALIVE only as a learning aid (to understand concepts), not to generate answers I submitted as my own work.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q20_Integrity" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q20_Integrity" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q20_Integrity" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q20_Integrity" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q20_Integrity" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q21</span><span class="q-text">Using ALIVE made me more aware of the limitations and potential errors of AI-generated explanations.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q21_AIAwareness" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q21_AIAwareness" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q21_AIAwareness" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q21_AIAwareness" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q21_AIAwareness" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part F -->
+    <div class="form-section" id="sec-alive-f">
+      <div class="section-header">
+        <div class="part-badge">Part F</div>
+        <div>
+          <h3>Equity, Accessibility &amp; Future Adoption</h3>
+          <p>Q22–Q25 · Language accessibility · Equity · Future use intent</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q22</span><span class="q-text">ALIVE was accessible and easy to use regardless of my English language proficiency or technical background.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q22_Accessibility" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q22_Accessibility" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q22_Accessibility" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q22_Accessibility" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q22_Accessibility" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q23</span><span class="q-text">A system like ALIVE would help level the playing field for students who do not have easy access to instructors or tutors outside of class.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q23_Equity" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q23_Equity" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q23_Equity" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q23_Equity" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q23_Equity" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q24</span><span class="q-text">I would want ALIVE to be available for all my future courses at RPI.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q24_FutureAdopt" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Definitely<br>No</span></div></label>
+            <label><input type="radio" name="Q24_FutureAdopt" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Probably<br>No</span></div></label>
+            <label><input type="radio" name="Q24_FutureAdopt" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Unsure</span></div></label>
+            <label><input type="radio" name="Q24_FutureAdopt" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Probably<br>Yes</span></div></label>
+            <label><input type="radio" name="Q24_FutureAdopt" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Definitely<br>Yes</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q25</span><span class="q-text">I think ALIVE-style interactive lecture systems should be made available to high school students preparing to enter university.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="Q25_PreUniversity" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="Q25_PreUniversity" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="Q25_PreUniversity" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="Q25_PreUniversity" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="Q25_PreUniversity" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part G -->
+    <div class="form-section" id="sec-alive-g">
+      <div class="section-header">
+        <div class="part-badge">Part G</div>
+        <div>
+          <h3>Open-Ended Feedback</h3>
+          <p>Q26–Q28 · Qualitative responses for thematic analysis</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q26</span><span class="q-text">Describe one specific moment this semester when ALIVE helped you understand something you were confused about. What did you ask, and how useful was the answer?</span></div>
+          <textarea class="form-textarea" name="Q26_HelpfulMoment" placeholder="Share a specific example…" style="height:110px"></textarea>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q27</span><span class="q-text">In your view, did ALIVE change how you interact with the course — for example, how often you attend class, visit office hours, or study with classmates? Please explain.</span></div>
+          <textarea class="form-textarea" name="Q27_CourseInteraction" placeholder="Describe any changes you noticed…" style="height:110px"></textarea>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">Q28</span><span class="q-text">What is the single most important improvement you would suggest for the ALIVE system to make it more useful for your learning?</span></div>
+          <textarea class="form-textarea" name="Q28_Improvement" placeholder="Your top suggestion…" style="height:110px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ COURSE FEEDBACK ══ -->
+    <div class="form-section" id="sec-course">
+      <div class="section-header">
+        <div class="part-badge">Course</div>
+        <div>
+          <h3>Bioimaging &amp; Bioinstrumentation — BMED 2300</h3>
+          <p>General course feedback · Instruction · Learning experience</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">C1</span><span class="q-text">Overall, how would you rate the quality of instruction in BMED 2300?</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="C1_Instruction" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Very<br>Poor</span></div></label>
+            <label><input type="radio" name="C1_Instruction" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Poor</span></div></label>
+            <label><input type="radio" name="C1_Instruction" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Fair</span></div></label>
+            <label><input type="radio" name="C1_Instruction" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Good</span></div></label>
+            <label><input type="radio" name="C1_Instruction" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Excellent</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">C2</span><span class="q-text">The course materials (slides, textbook, assignments) supported my learning effectively.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="C2_Materials" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="C2_Materials" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="C2_Materials" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="C2_Materials" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="C2_Materials" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">C3</span><span class="q-text">I feel confident in the core concepts of biomedical imaging and instrumentation after this course.</span></div>
+          <div class="likert-scale">
+            <label><input type="radio" name="C3_Confidence" value="1"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">1</span><span class="likert-caption">Strongly<br>Disagree</span></div></label>
+            <label><input type="radio" name="C3_Confidence" value="2"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">2</span><span class="likert-caption">Disagree</span></div></label>
+            <label><input type="radio" name="C3_Confidence" value="3"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">3</span><span class="likert-caption">Neutral</span></div></label>
+            <label><input type="radio" name="C3_Confidence" value="4"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">4</span><span class="likert-caption">Agree</span></div></label>
+            <label><input type="radio" name="C3_Confidence" value="5"><div class="likert-inner"><div class="likert-dot"></div><span class="likert-num">5</span><span class="likert-caption">Strongly<br>Agree</span></div></label>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">C4</span><span class="q-text">What aspects of the course worked well and what would you like to see improved?</span></div>
+          <textarea class="form-textarea" name="C4_CourseComments" placeholder="Share your thoughts on the course…" style="height:120px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OTHER / GENERAL MESSAGE ══ -->
+    <div class="form-section" id="sec-other">
+      <div class="section-header">
+        <div class="part-badge">Other</div>
+        <div>
+          <h3>General Message</h3>
+          <p>Concerns, suggestions, or anything else you'd like to share</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">M</span><span class="q-text">Please share any concerns, suggestions, or messages for the research team.</span></div>
+          <textarea class="form-textarea" name="OtherMessage" placeholder="Enter your message here…" style="height:160px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Submit ══ -->
+    <div class="submit-area" id="submit-area">
+      <button type="submit" class="submit-btn">Submit Feedback</button>
+      <p class="submit-note">Your responses are confidential and used solely for research purposes.<br>ALIVE Research Team · islamm11@rpi.edu</p>
+    </div>
+
+  </form>
+
+  <!-- Success message -->
+  <div id="success-msg">
+    <div class="checkmark">✓</div>
+    <h2>Thank You!</h2>
+    <p>Your feedback has been submitted. Your responses are confidential<br>and will directly inform the development of ALIVE.</p>
+  </div>
+
+</div><!-- /page-body -->
+
+<script>
+  function updateSections() {
+    const alive = document.getElementById('chk-alive').checked;
+    const course = document.getElementById('chk-course').checked;
+    const other = document.getElementById('chk-other').checked;
+    const any = alive || course || other;
+
+    // Identity card
+    document.getElementById('identity-card').classList.toggle('visible', any);
+
+    // ALIVE sections
+    ['sec-alive','sec-alive-b','sec-alive-c','sec-alive-d','sec-alive-e','sec-alive-f','sec-alive-g']
+      .forEach(id => document.getElementById(id).classList.toggle('visible', alive));
+
+    // Course section
+    document.getElementById('sec-course').classList.toggle('visible', course);
+
+    // Other section
+    document.getElementById('sec-other').classList.toggle('visible', other);
+
+    // Submit button
+    document.getElementById('submit-area').classList.toggle('visible', any);
+
+    // Update checkbox visual
+    document.getElementById('opt-alive').classList.toggle('selected', alive);
+    document.getElementById('opt-course').classList.toggle('selected', course);
+    document.getElementById('opt-other').classList.toggle('selected', other);
+
+    // Track selected sections
+    const sections = [];
+    if (alive) sections.push('ALIVE System Questionnaire');
+    if (course) sections.push('Bioimaging & Bioinstrumentation Course');
+    if (other) sections.push('Other / General Message');
+    document.getElementById('hidden-sections').value = sections.join(', ');
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('main-form');
+    const data = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(res => {
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('success-msg').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        alert('There was a problem submitting your form. Please try again or email islamm11@rpi.edu.');
+      }
+    }).catch(() => {
+      alert('Network error. Please check your connection and try again.');
+    });
+  }
+</script>
 </body>
 </html>
