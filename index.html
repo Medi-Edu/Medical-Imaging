@@ -28,7 +28,7 @@
           <li><a href="#courses">Courses</a></li>
           <li><a href="#alive">ALIVE</a></li>
           <li><a href="#lectures">Lectures</a></li>
-          <li><a href="#teaching">Teaching</a></li>
+          <li><a href="#carousel">Teaching</a></li>
           <li><a href="pages/feedback.html" target="_blank" rel="noopener">Feedback</a></li>
           <li><a href="https://wang-axis.github.io/" target="_blank" rel="noopener">Lab</a></li>
         </ul>
@@ -46,6 +46,31 @@
         graduate course <a href="#bmed4590">Medical Imaging</a> (BMED 4590/6590), taught by Dr. Ge Wang. Both are
         also taught interactively on <a href="https://alive.alivetutor.com/course" target="_blank" rel="noopener">ALIVE</a>,
         for enrolled students; anyone can watch the free preview.</p>
+
+      <!-- Teaching innovation — the lab home page's carousel (same markup and stylesheet): one slide at a
+           time, sliding every 2.5 s, pauses on hover; dots only. -->
+      <div id="carousel" class="carousel slide" aria-roledescription="carousel" aria-label="Teaching innovation" data-carousel>
+        <ol class="carousel-indicators">
+          <li class="active" tabindex="0" role="button" aria-label="Slide 1"></li>
+          <li tabindex="0" role="button" aria-label="Slide 2"></li>
+          <li tabindex="0" role="button" aria-label="Slide 3"></li>
+          <li tabindex="0" role="button" aria-label="Slide 4"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="item active">
+            <a href="images/p1.png" target="_blank" rel="noopener"><img src="images/p1.png" alt="Li MZ, et al., Wang G: Optimized Cheating Prevention for Online Exams during Social Distancing. npj Science of Learning, 2021."></a>
+          </div>
+          <div class="item">
+            <a href="images/p2.png" target="_blank" rel="noopener"><img src="images/p2.png" alt="Wiedeman C, Xie HD, Mou XQ, Wang G: Innovating the Medical Imaging Course. Technology &amp; Innovation 21, 2020."></a>
+          </div>
+          <div class="item">
+            <a href="images/p3.png" target="_blank" rel="noopener"><img src="images/p3.png" alt="2021 IEEE Region 1 Outstanding Teaching Award to Ge Wang for the first graduate and undergraduate deep-learning-based medical imaging courses at Rensselaer."></a>
+          </div>
+          <div class="item">
+            <a href="https://chatgpt.com/g/g-1imx1py4K-chatge-medical-imaging" target="_blank" rel="noopener"><img src="images/p4.png" alt="ChatGe-Medical-Imaging, a custom GPT medical imaging lecturer for biomedical engineering students."></a>
+          </div>
+        </div>
+      </div>
     </header>
 
     <section id="courses" aria-labelledby="courses-h">
@@ -98,27 +123,6 @@
       <noscript><p>The lecture list needs JavaScript. All lectures are also on <a href="https://alive.alivetutor.com/course" target="_blank" rel="noopener">ALIVE</a>.</p></noscript>
     </section>
 
-    <section id="teaching" aria-labelledby="teaching-h">
-      <h2 id="teaching-h">Teaching Innovation</h2>
-      <!-- The original rotating carousel: one image at a time, every 2.5 s, pauses on hover or focus. -->
-      <div id="carousel" class="carousel slide" aria-roledescription="carousel" aria-label="Teaching innovation" data-carousel>
-        <ol class="carousel-indicators">
-          <li class="active"><button type="button" aria-label="Slide 1"></button></li>
-          <li><button type="button" aria-label="Slide 2"></button></li>
-          <li><button type="button" aria-label="Slide 3"></button></li>
-          <li><button type="button" aria-label="Slide 4"></button></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="item active" role="group" aria-roledescription="slide" aria-label="1 of 4"><img src="images/p1.png" alt="Li MZ, et al., Wang G: Optimized Cheating Prevention for Online Exams during Social Distancing. npj Science of Learning, 2021."></div>
-          <div class="item" role="group" aria-roledescription="slide" aria-label="2 of 4"><img src="images/p2.png" alt="Wiedeman C, Xie HD, Mou XQ, Wang G: Innovating the Medical Imaging Course. Technology &amp; Innovation 21, 2020 — the five hands-on projects of the Fall 2020 course."></div>
-          <div class="item" role="group" aria-roledescription="slide" aria-label="3 of 4"><img src="images/p3.png" alt="2021 IEEE Region 1 Outstanding Teaching Award to Ge Wang, for the first graduate and undergraduate deep-learning-based medical imaging courses at Rensselaer."></div>
-          <div class="item" role="group" aria-roledescription="slide" aria-label="4 of 4"><img src="images/p4.png" alt="ChatGe-Medical-Imaging, a custom GPT medical imaging lecturer for biomedical engineering students."></div>
-        </div>
-        <button type="button" class="left carousel-control" data-step="-1" aria-label="Previous slide"><span aria-hidden="true">‹</span></button>
-        <button type="button" class="right carousel-control" data-step="1" aria-label="Next slide"><span aria-hidden="true">›</span></button>
-      </div>
-      <p class="carousel-note">Slide 4: <a href="https://chatgpt.com/g/g-1imx1py4K-chatge-medical-imaging" target="_blank" rel="noopener">ChatGe-Medical-Imaging</a>, a custom GPT lecturer for biomedical engineering students.</p>
-    </section>
   </main>
 
   <footer id="footer" class="panel">

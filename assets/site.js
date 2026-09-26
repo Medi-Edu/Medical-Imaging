@@ -12,23 +12,35 @@
   })
   menu.addEventListener("click", (e) => { if (e.target.closest("a")) { menu.classList.remove("in"); toggle.setAttribute("aria-expanded", false) } })
 
-  // Teaching-innovation carousel: one slide at a time, advances every 2.5 s, pauses on hover/focus.
+  // Teaching-innovation carousel — Bootstrap 3's slide sequence (the lab's page uses Bootstrap's own
+  // script: interval 2500, pause on hover). The .next/.left classes drive the CSS slide transition.
   const car = document.querySelector("[data-carousel]")
   if (car) {
     const items = [...car.querySelectorAll(".item")]
     const dots = [...car.querySelectorAll(".carousel-indicators li")]
-    let at = 0, timer = null
-    const show = (i) => {
-      at = (i + items.length) % items.length
-      items.forEach((x, k) => x.classList.toggle("active", k === at))
-      dots.forEach((d, k) => { d.classList.toggle("active", k === at); d.firstElementChild.setAttribute("aria-current", k === at) })
+    let at = 0, busy = false, timer = null
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
+    const go = (to) => {
+      to = (to + items.length) % items.length
+      if (busy || to === at) return
+      const from = items[at], next = items[to]
+      dots.forEach((d, k) => d.classList.toggle("active", k === to))
+      if (reduce) { from.classList.remove("active"); next.classList.add("active"); at = to; return }
+      busy = true
+      next.classList.add("next"); void next.offsetWidth // reflow so the transition starts from the right
+      from.classList.add("left"); next.classList.add("left")
+      setTimeout(() => {
+        next.classList.remove("next", "left"); next.classList.add("active")
+        from.classList.remove("active", "left"); at = to; busy = false
+      }, 600)
     }
-    const play = () => { clearInterval(timer); timer = setInterval(() => show(at + 1), 2500) }
-    const stop = () => clearInterval(timer)
-    dots.forEach((d, k) => d.addEventListener("click", () => show(k)))
-    car.querySelectorAll("[data-step]").forEach((b) => b.addEventListener("click", () => show(at + Number(b.dataset.step))))
-    car.addEventListener("mouseenter", stop); car.addEventListener("mouseleave", play)
-    car.addEventListener("focusin", stop); car.addEventListener("focusout", play)
+    const play = () => { clearInterval(timer); timer = setInterval(() => go(at + 1), 2500) }
+    dots.forEach((d, k) => {
+      d.addEventListener("click", () => go(k))
+      d.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(k) } })
+    })
+    car.addEventListener("mouseenter", () => clearInterval(timer)); car.addEventListener("mouseleave", play)
+    car.addEventListener("focusin", () => clearInterval(timer)); car.addEventListener("focusout", play)
     play()
   }
 
