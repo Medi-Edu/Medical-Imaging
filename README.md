@@ -17,3 +17,6 @@ Every lecture is also taught interactively on [ALIVE](https://alive.alivetutor.c
 
 No build step: commit to `main` and GitHub Pages publishes in about a minute. Preview locally with
 `python3 -m http.server` in this folder (opening the file directly cannot load the JSON).
+
+After editing `assets/site.css` or `assets/site.js`, bump the `?v=` number on both in `index.html`, so
+browsers do not mix a cached old script with the new page (GitHub Pages caches files for 10 minutes).
