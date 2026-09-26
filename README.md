@@ -8,9 +8,11 @@ Every lecture is also taught interactively on [ALIVE](https://alive.alivetutor.c
 
 - **Lectures, course facts, descriptions:** `data/courses.json` — the page is rendered from it.
   Keep lecture titles identical to ALIVE's, and `alive` = the ALIVE lecture id (`Lecture_NN` for
-  BMED 2300, `MI_G_NN` for BMED 4590/6590). `topic` picks the colour in the course arc
+  BMED 2300, `MI_G_NN` for BMED 4590/6590). `topic` is the gray label under each title
   (keys in `topics`). `recording` / `avatar` are YouTube video ids.
-- **Page text and sections:** `index.html`. **Styles:** `assets/site.css` (same tokens as ALIVE).
+- **Page text and sections:** `index.html`. **Styles:** the WANG-AXIS lab stylesheet
+  (`https://wang-axis.github.io/css/main.css`, linked, so this site always matches the lab site) plus a few
+  additions in `assets/site.css`.
 - **Feedback survey:** `pages/feedback.html` (Formspree).
 
 No build step: commit to `main` and GitHub Pages publishes in about a minute. Preview locally with

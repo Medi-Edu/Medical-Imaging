@@ -1,5 +1,17 @@
-// Renders the course cards and lecture lists from data/courses.json — edit that file, not this one.
+// Renders the course blocks and lecture lists from data/courses.json — edit that file, not this one.
+// Markup uses the lab's Bootstrap 3 (Lumen) classes; there is no Bootstrap JS, so the navbar toggle
+// and the tabs are handled here.
 (async function () {
+  // Mobile navbar toggle
+  const toggle = document.querySelector("[data-nav-toggle]")
+  const menu = document.getElementById("navbar-collapse-1")
+  toggle.addEventListener("click", () => {
+    const open = menu.classList.toggle("in")
+    toggle.setAttribute("aria-expanded", open)
+    toggle.classList.toggle("collapsed", !open)
+  })
+  menu.addEventListener("click", (e) => { if (e.target.closest("a")) { menu.classList.remove("in"); toggle.setAttribute("aria-expanded", false) } })
+
   const data = await fetch("data/courses.json").then((r) => r.json())
   const ALIVE = data.alive
 
@@ -13,85 +25,83 @@
   const file = (p) => p.split("/").map(encodeURIComponent).join("/") // names contain spaces and "&"
   const ext = (p) => p.split(".").pop().toUpperCase().replace("PPTX", "PPT")
   const yt = (id) => "https://youtu.be/" + id
-  const out = { target: "_blank", rel: "noopener" }
-  const topicColor = (t) => `--c: var(--t-${t})`
 
-  // Course cards
-  const grid = document.querySelector("[data-courses]")
+  // Course blocks
+  const box = document.querySelector("[data-courses]")
   for (const c of data.courses) {
-    const facts = el("dl", { class: "facts" })
+    const facts = el("dl", { class: "dl-horizontal facts" })
     for (const [k, v] of c.facts) facts.append(el("dt", {}, k), el("dd", {}, v))
-    const actions = el("div", { class: "actions" },
-      el("a", { class: "chip-link primary", href: `${ALIVE}/course/about/${c.slug}`, ...out }, "Course on ALIVE ↗"),
-      el("a", { class: "chip-link", href: `${ALIVE}/preview/${c.slug}`, ...out }, "Free preview ↗"),
-      c.syllabus
-        ? el("a", { class: "chip-link", href: file(c.syllabus) }, "Syllabus (DOCX)")
-        : el("a", { class: "chip-link", href: `${ALIVE}/course/about/${c.slug}`, ...out }, "Syllabus on ALIVE ↗"))
-    grid.append(el("article", { class: "course", "aria-labelledby": c.id + "-t" },
-      el("span", { class: "code" }, c.code),
-      el("h3", { id: c.id + "-t" }, c.title),
-      el("p", { class: "meta" }, `${c.level} · ${c.instructors}`),
-      el("p", { class: "desc" }, c.description),
-      facts, actions))
+    box.append(el("div", { class: "course", id: c.id },
+      el("h3", {}, c.title, " ", el("small", {}, c.code)),
+      el("p", { class: "text-muted" }, `${c.level} · ${c.instructors}`),
+      el("p", {}, c.description),
+      facts,
+      el("p", { class: "course-actions" },
+        el("a", { class: "btn btn-primary btn-sm", href: `${ALIVE}/course/about/${c.slug}` }, "Course on ALIVE"), " ",
+        el("a", { class: "btn btn-default btn-sm", href: `${ALIVE}/preview/${c.slug}` }, "Free preview"), " ",
+        c.syllabus
+          ? el("a", { class: "btn btn-default btn-sm", href: file(c.syllabus) }, "Syllabus")
+          : el("a", { class: "btn btn-default btn-sm", href: `${ALIVE}/course/about/${c.slug}` }, "Syllabus on ALIVE"), " ",
+        el("a", { class: "btn btn-default btn-sm", href: `#${c.id}-1` }, "Lectures"))))
   }
 
-  // Lecture tabs + panels
+  // Lecture tabs + tables
   const tabs = document.querySelector("[data-tabs]")
   const panels = document.querySelector("[data-panels]")
-  const buttons = []
+  const links = []
   for (const c of data.courses) {
-    const b = el("button", { role: "tab", id: "tab-" + c.id, "aria-controls": "panel-" + c.id, type: "button" },
-      c.code, el("span", { class: "count" }, String(c.lectures.length)))
-    b.addEventListener("click", () => select(c.id, true))
-    tabs.append(b); buttons.push(b)
+    const a = el("a", { role: "tab", id: "tab-" + c.id, "aria-controls": "panel-" + c.id, href: "#" + c.id + "-1" },
+      c.code, " ", el("span", { class: "badge" }, String(c.lectures.length)))
+    a.addEventListener("click", (e) => { e.preventDefault(); select(c.id, true) })
+    tabs.append(el("li", { role: "presentation" }, a)); links.push(a)
 
-    const used = [...new Set(c.lectures.map((l) => l.topic))]
-    const arc = el("div", { class: "arc", "aria-label": "Lectures by topic" })
-    const list = el("ol", { class: "lec-list" })
+    const body = el("tbody")
     for (const l of c.lectures) {
-      const anchor = `${c.id}-${l.n}`
-      arc.append(el("a", { href: "#" + anchor, style: topicColor(l.topic), title: `${l.n}. ${l.title} — ${data.topics[l.topic]}`, "aria-label": `Lecture ${l.n}: ${l.title}` }))
-      const actions = el("div", { class: "actions" })
-      if (l.slides) actions.append(el("a", { class: "chip-link", href: file(l.slides) }, `Slides (${ext(l.slides)})`))
-      if (l.recording) actions.append(el("a", { class: "chip-link", href: yt(l.recording), ...out }, "Recording ↗"))
-      if (l.avatar) actions.append(el("a", { class: "chip-link", href: yt(l.avatar), ...out }, "Avatar video ↗"))
-      if (l.transcript) actions.append(el("a", { class: "chip-link", href: file(l.transcript) }, "Transcript (PDF)"))
-      if (l.preview) actions.append(el("a", { class: "chip-link", href: `${ALIVE}/preview/${c.slug}`, ...out }, "Free preview ↗"))
-      actions.append(el("a", { class: "chip-link primary", href: `${ALIVE}/course/${c.slug}/classroom/${l.alive}`, ...out }, "Open in ALIVE ↗"))
-      list.append(el("li", { class: "lec", id: anchor },
-        el("span", { class: "num" }, String(l.n)),
-        el("div", {}, el("span", { class: "lec-title" }, l.title), el("span", { class: "tag", style: topicColor(l.topic) }, data.topics[l.topic])),
-        actions))
+      const items = []
+      if (l.slides) items.push(el("a", { href: file(l.slides) }, `Slides (${ext(l.slides)})`))
+      if (l.recording) items.push(el("a", { href: yt(l.recording) }, "Recording"))
+      if (l.avatar) items.push(el("a", { href: yt(l.avatar) }, "Avatar video"))
+      if (l.transcript) items.push(el("a", { href: file(l.transcript) }, "Transcript"))
+      if (l.preview) items.push(el("a", { href: `${ALIVE}/preview/${c.slug}` }, "Free preview"))
+      items.push(el("a", { href: `${ALIVE}/course/${c.slug}/classroom/${l.alive}`, class: "alive-link" }, "Open in ALIVE"))
+      const mats = el("td", { class: "mats" })
+      items.forEach((x, i) => { if (i) mats.append(el("span", { class: "sep", "aria-hidden": "true" }, " · ")); mats.append(x) })
+      body.append(el("tr", { id: `${c.id}-${l.n}` },
+        el("td", { class: "num" }, String(l.n)),
+        el("td", {}, el("span", { class: "lec-title" }, l.title), el("br"), el("small", { class: "text-muted" }, data.topics[l.topic])),
+        mats))
     }
-    const legend = el("ul", { class: "legend" })
-    for (const t of used) legend.append(el("li", { style: topicColor(t) }, data.topics[t]))
-    panels.append(el("div", { class: "panel", role: "tabpanel", id: "panel-" + c.id, "aria-labelledby": "tab-" + c.id, hidden: "" },
-      el("p", { class: "note" }, `${c.title} · ${c.instructors}. ${c.note}`), arc, legend, list))
+    panels.append(el("div", { class: "lec-panel", role: "tabpanel", id: "panel-" + c.id, "aria-labelledby": "tab-" + c.id, hidden: "" },
+      el("p", { class: "text-muted lec-note" }, `${c.title} · ${c.instructors}. ${c.note}`),
+      el("table", { class: "table table-hover lectures" },
+        el("thead", {}, el("tr", {}, el("th", { scope: "col" }, "#"), el("th", { scope: "col" }, "Lecture"), el("th", { scope: "col" }, "Materials"))),
+        body)))
   }
 
   function select(id, focus) {
     for (const c of data.courses) {
       const on = c.id === id
-      const b = document.getElementById("tab-" + c.id)
-      b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1
+      const a = document.getElementById("tab-" + c.id)
+      a.parentElement.classList.toggle("active", on)
+      a.setAttribute("aria-selected", on); a.tabIndex = on ? 0 : -1
       document.getElementById("panel-" + c.id).hidden = !on
-      if (on && focus) b.focus()
+      if (on && focus) a.focus()
     }
   }
   tabs.addEventListener("keydown", (e) => {
-    const i = buttons.indexOf(document.activeElement)
+    const i = links.indexOf(document.activeElement)
     if (i < 0 || (e.key !== "ArrowRight" && e.key !== "ArrowLeft")) return
-    const next = buttons[(i + (e.key === "ArrowRight" ? 1 : buttons.length - 1)) % buttons.length]
+    const next = links[(i + (e.key === "ArrowRight" ? 1 : links.length - 1)) % links.length]
     select(next.id.slice(4), true); e.preventDefault()
   })
 
-  // A #bmed4590 or #bmed4590-12 link opens that course's tab (and lands on the lecture).
+  // #bmed4590 (course block) or #bmed4590-12 (lecture) opens that course's tab and lands there.
   function fromHash() {
     const h = location.hash.slice(1)
     const c = data.courses.find((x) => h === x.id || h.startsWith(x.id + "-"))
     select(c ? c.id : data.courses[0].id, false)
-    // The list is rendered after the browser already tried (and failed) to jump to the anchor.
-    if (c) requestAnimationFrame(() => document.getElementById(h === c.id ? "lectures" : h)?.scrollIntoView())
+    // The rows are rendered after the browser already tried (and failed) to jump to the anchor.
+    if (c) requestAnimationFrame(() => document.getElementById(h)?.scrollIntoView())
   }
   window.addEventListener("hashchange", fromHash)
   fromHash()
