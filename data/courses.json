@@ -35,7 +35,7 @@
     ]
    ],
    "syllabus": "assets/BME-ABET-Syllabi-2025-BMED2300.docx",
-   "note": "Slides, the original lecture recording, an AI-avatar video and a transcript for every lecture. Open in ALIVE to take the lecture interactively.",
+   "note": "Slides, transcripts and the YouTube recordings and avatar videos are open to everyone. The interactive ALIVE lecture is for enrolled students; anyone can try Lecture 1 as a free preview.",
    "lectures": [
     {
      "n": 1,
@@ -294,7 +294,7 @@
      "Participation 10% · Homework 30% · Midterm 30% · Final 30%"
     ]
    ],
-   "note": "Lecture materials are delivered on ALIVE to enrolled students. Lecture 1 is a free preview.",
+   "note": "Interactive lectures on ALIVE are for enrolled students. Lecture 1 is a free preview for everyone.",
    "lectures": [
     {
      "n": 1,

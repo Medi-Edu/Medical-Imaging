@@ -1,50 +1,109 @@
-/* Course-site additions on top of the WANG-AXIS lab stylesheet (https://wang-axis.github.io/css/main.css,
-   Bootswatch Lumen). Only the lab's own colours: link #158CBA, text #555, headings #333,
-   rules #e7e7e7, wells #fafafa. */
-html { scroll-padding-top: 70px; }
-h2 { margin-top: 36px; }
-#main h1 { margin-bottom: 16px; }
+/* Layout for the course site. Every colour and font comes from the WANG-AXIS lab stylesheet
+   (wang-axis.github.io/css/main.css, Bootswatch Lumen); the only values used here are the lab's own:
+   link #158CBA, text #555, headings #333, rules #e7e7e7 / #ddd, wells #fafafa, muted #999. */
 
-/* Courses */
-.course { padding-bottom: 8px; border-bottom: 1px solid #e7e7e7; margin-bottom: 20px; }
-.course:last-child { border-bottom: 0; }
-.course h3 small { color: #999; }
-.facts { margin: 12px 0; }
-.facts dt { color: #333; font-weight: 400; }
-@media (min-width: 768px) {
-  .facts dt { width: 110px; }
-  .facts dd { margin-left: 125px; }
-}
-.course-actions .btn { margin: 0 4px 6px 0; }
+html { scroll-padding-top: 76px; }
+
+/* Container — 1140px, balanced gutters; the navbar lines up with it. */
+.page, .navbar > .container-fluid { max-width: 1140px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+@media (min-width: 768px) { .page, .navbar > .container-fluid { padding-left: 32px; padding-right: 32px; } }
+main.page > section { margin-top: 48px; }
+main.page h2 { margin: 0 0 20px; }
+
+/* Header */
+.intro { padding-top: 12px; }
+.intro .eyebrow { margin: 0; color: #999; font-size: 14px; }
+.intro h1 { margin: 6px 0 14px; }
+.intro p:last-child { max-width: 860px; }
+
+/* Shared card surface (the lab's well colours) */
+.panel-box { background: #fafafa; border: 1px solid #e7e7e7; border-radius: 4px; }
+
+/* Courses — two equal-height cards */
+.course-grid { display: grid; gap: 32px; }
+@media (min-width: 992px) { .course-grid { grid-template-columns: 1fr 1fr; } }
+.course-card { display: flex; flex-direction: column; padding: 24px; }
+.course-card header .label { font-size: 12px; letter-spacing: 0.02em; }
+.course-card h3 { margin: 12px 0 4px; }
+.course-card .meta { color: #999; margin: 0; }
+.card-body { flex: 1; margin-top: 16px; }
+.card-body > p { margin-bottom: 16px; }
+.kv { margin: 0; border-top: 1px solid #e7e7e7; }
+.kv > div { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 8px 0; border-bottom: 1px solid #e7e7e7; }
+.kv dt { color: #333; font-weight: 400; }
+.kv dd { margin: 0; }
+.course-card footer { margin-top: 20px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-row .btn { min-width: 130px; margin: 0; }
+.access, .access-note { color: #999; font-size: 14px; margin: 10px 0 0; }
+
+/* ALIVE spotlight + Quick Links */
+.banner { display: grid; gap: 32px; }
+@media (min-width: 992px) { .banner { grid-template-columns: 2fr 1fr; } }
+.spotlight, .quick { padding: 24px; }
+.spotlight .lede { max-width: 640px; }
+.spotlight-body { display: grid; gap: 24px; margin-top: 8px; }
+@media (min-width: 768px) { .spotlight-body { grid-template-columns: 1fr 1fr; } }
+.stats { margin: 0; display: grid; gap: 8px; }
+.stats > div { background: #fff; border: 1px solid #e7e7e7; border-radius: 4px; padding: 8px 12px; }
+.stats dt { color: #333; font-size: 20px; font-weight: 700; }
+.stats dd { margin: 0; font-size: 14px; }
+.credit { font-size: 14px; margin: 12px 0 4px; }
+.spotlight .access { margin: 0 0 14px; }
+.podcast .small { color: #999; margin-top: 6px; }
+.quick ul { list-style: none; margin: 0; padding: 0; }
+.quick li { padding: 8px 0; border-bottom: 1px solid #e7e7e7; }
+.quick li:last-child { border-bottom: 0; }
 
 /* Lectures */
-.nav-tabs { margin-top: 12px; }
-.nav-tabs .badge { background: #999; }
-.nav-tabs > li.active .badge { background: #158CBA; }
-.lec-note { margin: 14px 0 6px; }
-.lectures .num { width: 36px; color: #999; }
-.lectures .lec-title { color: #333; }
-.lectures .sep { color: #ccc; }
-.lectures .mats a { text-decoration: none; white-space: nowrap; }
-.lectures .mats a:hover { text-decoration: underline; }
-.lectures .alive-link { font-weight: 700; }
-.lec-panel[hidden] { display: none; }
+.toggle { display: flex; flex-wrap: wrap; gap: 8px; }
+.toggle .btn { margin: 0; }
+.access-note { margin: 14px 0 12px; }
+.table-wrap { border: 1px solid #e7e7e7; border-radius: 4px; }
+.lectures { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.lectures th { color: #333; font-weight: 700; font-size: 14px; text-align: left; padding: 10px 12px; background: #fafafa; border-bottom: 1px solid #e7e7e7; }
+.lectures td { padding: 10px 12px; border-bottom: 1px solid #e7e7e7; vertical-align: middle; }
+.lectures tbody tr:last-child td { border-bottom: 0; }
+.lectures tbody tr:hover, .lectures tbody tr:target { background: #fafafa; }
+.lectures th:first-child, .lectures .num { text-align: center; }
+.lectures .num { color: #999; }
+.lectures .title { color: #333; font-weight: 700; line-height: 1.35; }
+.lectures th:last-child, .lectures .go { text-align: right; }
+.lectures .go .btn { margin: 0; white-space: nowrap; }
+.topic { display: inline-block; font-size: 13px; line-height: 1.3; padding: 3px 10px; border-radius: 999px; background: #fafafa; border: 1px solid #e7e7e7; }
+.mat-grid { display: grid; grid-template-columns: 96px 84px 64px 84px; gap: 6px; }
+.mat-grid .pill { margin: 0; text-align: center; }
+.mats .pill { display: inline-block; margin: 2px 6px 2px 0; font-size: 13px; line-height: 1.3; padding: 3px 10px; border: 1px solid #ddd; border-radius: 999px; background: #fff; text-decoration: none; white-space: nowrap; }
+.mats .pill:hover, .mats .pill:focus { border-color: #158CBA; }
+.mats .muted { color: #999; font-size: 14px; }
+
 @media (max-width: 767px) {
-  .lectures thead { display: none; }
-  .lectures tr { display: block; border-top: 1px solid #ddd; padding: 8px 0; }
-  .lectures td { display: block; border: 0 !important; padding: 2px 0 !important; }
-  .lectures .num { display: none; }
+  .lectures colgroup, .lectures thead { display: none; }
+  .lectures, .lectures tbody, .lectures tr, .lectures td { display: block; width: 100%; }
+  .lectures tr { padding: 12px 14px; border-bottom: 1px solid #e7e7e7; }
+  .lectures td { padding: 3px 0; border: 0; text-align: left !important; }
+  .lectures .num { display: inline; color: #999; }
+  .lectures .num::after { content: "."; }
+  .lectures .title { display: inline; margin-left: 4px; }
+  .lectures .go .btn { display: block; margin-top: 6px; }
+  .mat-grid { grid-template-columns: repeat(auto-fill, minmax(84px, max-content)); }
+  .mat-grid > span:empty { display: none; }
 }
 
-/* Sidebar */
-#newsid .stat { margin-bottom: 6px; }
-#newsid .well h4 { margin-top: 0; }
-#newsid .embed-responsive { border-radius: 4px; }
+/* Teaching innovation — the original carousel (Bootstrap classes, colours from the lab stylesheet). */
+#carousel { margin: 0; background: #fff; border: 1px solid #e7e7e7; border-radius: 4px; padding-bottom: 36px; }
+#carousel .item img { width: 100%; max-height: 460px; object-fit: contain; margin: 16px 0 0; border-radius: 0; }
+#carousel .carousel-indicators { bottom: 6px; }
+#carousel .carousel-indicators button { all: unset; display: block; width: 100%; height: 100%; cursor: pointer; }
+#carousel .carousel-control { border: 0; width: 8%; font-size: 48px; line-height: 1; background-image: none; color: #999; text-shadow: none; }
+#carousel .carousel-control:hover, #carousel .carousel-control:focus { color: #158CBA; }
+.carousel-note { margin: 10px 0 0; font-size: 14px; color: #999; }
 
-/* Teaching innovation — lab multimedia style: shadowed images, caption beneath */
-.gallery figure { margin-bottom: 16px; }
-.gallery img { width: 100%; background: #fff; box-shadow: 2px 2px 5px #888; margin: 8px 0 12px; }
-@media (min-width: 768px) { .gallery figure:nth-child(odd) { clear: left; } }
+/* Footer — copyright | contact */
+#footer { margin: 56px 0 0; border-radius: 0; }
+.foot-grid { display: grid; gap: 12px; }
+@media (min-width: 768px) { .foot-grid { grid-template-columns: 1fr auto; } }
+.foot-grid p, .foot-grid address { margin: 0; }
 
 :focus-visible { outline: 2px solid #158CBA; outline-offset: 2px; }
-#footer { margin: 40px 0 0; border-radius: 0; }
+.lec-panel[hidden] { display: none; }

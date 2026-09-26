@@ -6,7 +6,7 @@
   <title>Medical Imaging Courses at RPI — WANG-AXIS Lab</title>
   <meta name="description" content="Course materials for Bio-Imaging and Bio-Instrumentation (BMED 2300) and Medical Imaging (BMED 4590/6590) at Rensselaer Polytechnic Institute, with interactive lectures on ALIVE.">
   <link rel="icon" href="images/favicon.ico">
-  <!-- The WANG-AXIS lab stylesheet (Bootswatch Lumen), so this site looks exactly like wang-axis.github.io. -->
+  <!-- The WANG-AXIS lab stylesheet (Bootswatch Lumen): every colour and font on this page comes from it. -->
   <link rel="stylesheet" href="https://wang-axis.github.io/css/main.css">
   <link rel="stylesheet" href="assets/site.css">
   <script src="assets/site.js" defer></script>
@@ -26,89 +26,108 @@
       <div class="collapse navbar-collapse" id="navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#courses">Courses</a></li>
-          <li><a href="#lectures">Lectures</a></li>
           <li><a href="#alive">ALIVE</a></li>
+          <li><a href="#lectures">Lectures</a></li>
           <li><a href="#teaching">Teaching</a></li>
-          <li><a href="pages/feedback.html">Feedback</a></li>
-          <li><a href="https://wang-axis.github.io/">Lab</a></li>
+          <li><a href="pages/feedback.html" target="_blank" rel="noopener">Feedback</a></li>
+          <li><a href="https://wang-axis.github.io/" target="_blank" rel="noopener">Lab</a></li>
         </ul>
       </div>
     </div>
   </div>
 
-  <div class="container-fluid" id="top">
-    <div class="row">
-      <main id="main" class="col-sm-8">
-        <h1>Medical Imaging Courses at RPI</h1>
-        <p>Two medical imaging courses in the <a href="https://bme.rpi.edu/">Department of Biomedical Engineering</a>,
-          <a href="https://www.rpi.edu/">Rensselaer Polytechnic Institute</a>: the undergraduate
-          <a href="#bmed2300">Bio-Imaging and Bio-Instrumentation</a> (BMED 2300), taught by
-          <a href="https://faculty.rpi.edu/ge-wang">Dr. Ge Wang</a> and <a href="https://faculty.rpi.edu/hisham-mohamed">Dr. Hisham Mohamed</a>,
-          and <a href="#bmed4590">Medical Imaging</a> (BMED 4590/6590), taught by Dr. Ge Wang.
-          Every lecture is also taught interactively on <a href="https://alive.alivetutor.com/course">ALIVE</a>.</p>
+  <main id="main" class="page">
+    <header class="intro" id="top">
+      <p class="eyebrow">Department of Biomedical Engineering · Rensselaer Polytechnic Institute</p>
+      <h1>Medical Imaging Courses at RPI</h1>
+      <p>The undergraduate course <a href="#bmed2300">Bio-Imaging and Bio-Instrumentation</a> (BMED 2300), taught by
+        <a href="https://faculty.rpi.edu/ge-wang" target="_blank" rel="noopener">Dr. Ge Wang</a> and
+        <a href="https://faculty.rpi.edu/hisham-mohamed" target="_blank" rel="noopener">Dr. Hisham Mohamed</a>, and the
+        graduate course <a href="#bmed4590">Medical Imaging</a> (BMED 4590/6590), taught by Dr. Ge Wang. Both are
+        also taught interactively on <a href="https://alive.alivetutor.com/course" target="_blank" rel="noopener">ALIVE</a>,
+        for enrolled students; anyone can watch the free preview.</p>
+    </header>
 
-        <h2 id="courses">Courses</h2>
-        <div data-courses></div>
+    <section id="courses" aria-labelledby="courses-h">
+      <h2 id="courses-h">Courses</h2>
+      <div class="course-grid" data-courses></div>
+    </section>
 
-        <h2 id="lectures">Lectures</h2>
-        <ul class="nav nav-tabs" role="tablist" aria-label="Course" data-tabs></ul>
-        <div data-panels></div>
-        <noscript><p>The lecture list needs JavaScript. All lectures are also on <a href="https://alive.alivetutor.com/course">ALIVE</a>.</p></noscript>
-
-        <h2 id="teaching">Teaching Innovation</h2>
-        <div class="row gallery">
-          <figure class="col-sm-6"><a href="images/p3.png"><img src="images/p3.png" alt="IEEE Region 1 award plaque presented to Ge Wang" loading="lazy"></a>
-            <p>2021 IEEE Region 1 Outstanding Teaching Award, for the first graduate and undergraduate deep-learning-based medical imaging courses at Rensselaer.</p></figure>
-          <figure class="col-sm-6"><a href="images/p2.png"><img src="images/p2.png" alt="Table of the five hands-on projects in the Fall 2020 course" loading="lazy"></a>
-            <p>Wiedeman C, Xie HD, Mou XQ, Wang G: Innovating the Medical Imaging Course. <i>Technology &amp; Innovation</i> 21, 2020.</p></figure>
-          <figure class="col-sm-6"><a href="images/p1.png"><img src="images/p1.png" alt="Diagrams of question-order schemes for online exams" loading="lazy"></a>
-            <p>Li MZ, et al., Wang G: Optimized Cheating Prevention for Online Exams during Social Distancing. <i>npj Science of Learning</i>, 2021.</p></figure>
-          <figure class="col-sm-6"><a href="images/p4.png"><img src="images/p4.png" alt="ChatGe-Medical-Imaging custom GPT page" loading="lazy"></a>
-            <p><a href="https://chatgpt.com/g/g-1imx1py4K-chatge-medical-imaging">ChatGe-Medical-Imaging</a>, a custom GPT lecturer for biomedical engineering students.</p></figure>
-        </div>
-      </main>
-
-      <aside id="newsid" class="col-sm-4">
-        <div class="well" id="alive">
-          <h4>ALIVE</h4>
-          <p>ALIVE turns passive lectures into course-grounded, avatar-led interactive learning, linking evidence of student difficulty to instructor-approved help and follow-up.</p>
-          <p class="stat"><b>23 lectures</b> — Spring 2026 deployment at RPI</p>
-          <p class="stat"><b>28 of 31</b> saw no drop in lecture attendance, office hours or peer study</p>
-          <p class="stat"><b>22 of 31</b> became more aware of what AI can and cannot do</p>
-          <p class="small">Built on Medical Imaging (graduate · Ge Wang) and Bio-Imaging and Bio-Instrumentation (undergraduate · Ge Wang and Hisham Mohamed).</p>
-          <a class="btn btn-primary btn-sm" href="https://alive.alivetutor.com/course">Open ALIVE</a>
-        </div>
-
-        <div class="well">
-          <h4>Podcast</h4>
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://share.synthesia.io/embeds/videos/9398e9b9-c828-4a67-b6a6-160c8f204215" title="Podcast with Ge Wang (Synthesia video)" loading="lazy" allow="encrypted-media; fullscreen"></iframe>
+    <section id="alive" class="banner" aria-labelledby="alive-h">
+      <div class="panel-box spotlight">
+        <h2 id="alive-h">ALIVE</h2>
+        <p class="lede">ALIVE turns passive lectures into course-grounded, avatar-led interactive learning, linking evidence of student difficulty to instructor-approved help and follow-up.</p>
+        <div class="spotlight-body">
+          <div>
+            <dl class="stats">
+              <div><dt>23 lectures</dt><dd>Spring 2026 deployment at RPI</dd></div>
+              <div><dt>28 of 31</dt><dd>saw no drop in lecture attendance, office hours or peer study</dd></div>
+              <div><dt>22 of 31</dt><dd>became more aware of what AI can and cannot do</dd></div>
+            </dl>
+            <p class="credit">Built on Medical Imaging (graduate · Ge Wang) and Bio-Imaging and Bio-Instrumentation (undergraduate · Ge Wang and Hisham Mohamed).</p>
+            <p class="access">ALIVE lectures are for enrolled students. Everyone can watch the free preview.</p>
+            <a class="btn btn-primary" href="https://alive.alivetutor.com/course" target="_blank" rel="noopener">Open ALIVE →</a>
+          </div>
+          <div class="podcast">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="https://share.synthesia.io/embeds/videos/9398e9b9-c828-4a67-b6a6-160c8f204215" title="Podcast with Ge Wang (Synthesia video)" loading="lazy" allow="encrypted-media; fullscreen"></iframe>
+            </div>
+            <p class="small">Podcast with Ge Wang</p>
           </div>
         </div>
+      </div>
 
-        <div class="well" id="resources">
-          <h4>Quick Links</h4>
-          <p>- <a href="assets/BME-ABET-Syllabi-2025-BMED2300.docx">BMED 2300 syllabus</a></p>
-          <p>- <a href="https://alive.alivetutor.com/course/about/medical-imaging-graduate">BMED 4590/6590 on ALIVE</a></p>
-          <p>- <a href="pages/feedback.html">Feedback form</a></p>
-          <p>- <a href="assets/mile-v2-031818.pdf">Book draft (March 2018)</a></p>
-          <p>- <a href="https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted">MATLAB Onramp</a></p>
-          <p>- <a href="https://www.mathworks.com/products/matlab.html">MATLAB</a></p>
-          <p>- <a href="https://wang-axis.github.io/">WANG-AXIS Lab</a></p>
+      <div class="panel-box quick" id="resources">
+        <h2>Quick Links</h2>
+        <ul>
+          <li><a href="assets/BME-ABET-Syllabi-2025-BMED2300.docx" target="_blank" rel="noopener">BMED 2300 syllabus</a></li>
+          <li><a href="https://alive.alivetutor.com/course/about/medical-imaging-graduate" target="_blank" rel="noopener">BMED 4590/6590 syllabus on ALIVE</a></li>
+          <li><a href="pages/feedback.html" target="_blank" rel="noopener">Feedback form</a></li>
+          <li><a href="assets/mile-v2-031818.pdf" target="_blank" rel="noopener">Book draft (March 2018)</a></li>
+          <li><a href="https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted" target="_blank" rel="noopener">MATLAB Onramp</a></li>
+          <li><a href="https://www.mathworks.com/products/matlab.html" target="_blank" rel="noopener">MATLAB</a></li>
+          <li><a href="https://wang-axis.github.io/" target="_blank" rel="noopener">WANG-AXIS Lab</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="lectures" aria-labelledby="lectures-h">
+      <h2 id="lectures-h">Lectures</h2>
+      <div class="toggle" role="tablist" aria-label="Course" data-tabs></div>
+      <div data-panels></div>
+      <noscript><p>The lecture list needs JavaScript. All lectures are also on <a href="https://alive.alivetutor.com/course" target="_blank" rel="noopener">ALIVE</a>.</p></noscript>
+    </section>
+
+    <section id="teaching" aria-labelledby="teaching-h">
+      <h2 id="teaching-h">Teaching Innovation</h2>
+      <!-- The original rotating carousel: one image at a time, every 2.5 s, pauses on hover or focus. -->
+      <div id="carousel" class="carousel slide" aria-roledescription="carousel" aria-label="Teaching innovation" data-carousel>
+        <ol class="carousel-indicators">
+          <li class="active"><button type="button" aria-label="Slide 1"></button></li>
+          <li><button type="button" aria-label="Slide 2"></button></li>
+          <li><button type="button" aria-label="Slide 3"></button></li>
+          <li><button type="button" aria-label="Slide 4"></button></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="item active" role="group" aria-roledescription="slide" aria-label="1 of 4"><img src="images/p1.png" alt="Li MZ, et al., Wang G: Optimized Cheating Prevention for Online Exams during Social Distancing. npj Science of Learning, 2021."></div>
+          <div class="item" role="group" aria-roledescription="slide" aria-label="2 of 4"><img src="images/p2.png" alt="Wiedeman C, Xie HD, Mou XQ, Wang G: Innovating the Medical Imaging Course. Technology &amp; Innovation 21, 2020 — the five hands-on projects of the Fall 2020 course."></div>
+          <div class="item" role="group" aria-roledescription="slide" aria-label="3 of 4"><img src="images/p3.png" alt="2021 IEEE Region 1 Outstanding Teaching Award to Ge Wang, for the first graduate and undergraduate deep-learning-based medical imaging courses at Rensselaer."></div>
+          <div class="item" role="group" aria-roledescription="slide" aria-label="4 of 4"><img src="images/p4.png" alt="ChatGe-Medical-Imaging, a custom GPT medical imaging lecturer for biomedical engineering students."></div>
         </div>
-      </aside>
-    </div>
-  </div>
+        <button type="button" class="left carousel-control" data-step="-1" aria-label="Previous slide"><span aria-hidden="true">‹</span></button>
+        <button type="button" class="right carousel-control" data-step="1" aria-label="Next slide"><span aria-hidden="true">›</span></button>
+      </div>
+      <p class="carousel-note">Slide 4: <a href="https://chatgpt.com/g/g-1imx1py4K-chatge-medical-imaging" target="_blank" rel="noopener">ChatGe-Medical-Imaging</a>, a custom GPT lecturer for biomedical engineering students.</p>
+    </section>
+  </main>
 
-  <div id="footer" class="panel">
+  <footer id="footer" class="panel">
     <div class="panel-footer">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm-8"><p>&copy; 2026 WANG-AXIS Lab, Rensselaer Polytechnic Institute.</p></div>
-          <div class="col-sm-4">Contact:<br>CBIS, Rensselaer Polytechnic Institute<br>110 8th St, Troy, NY, USA</div>
-        </div>
+      <div class="page foot-grid">
+        <p>&copy; 2026 WANG-AXIS Lab, Rensselaer Polytechnic Institute.</p>
+        <address>Contact:<br>CBIS, Rensselaer Polytechnic Institute<br>110 8th St, Troy, NY, USA</address>
       </div>
     </div>
-  </div>
+  </footer>
 </body>
 </html>
