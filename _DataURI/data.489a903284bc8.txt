@@ -1,1 +1,0 @@
-chrome-extension://namibaeakmnknolcnomfdhklhkabkchl/chrome-popup/index.js

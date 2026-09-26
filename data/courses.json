@@ -1,0 +1,453 @@
+{
+ "alive": "https://alive.alivetutor.com",
+ "topics": {
+  "foundations": "Foundations",
+  "signals": "Signals & systems",
+  "quality": "Image quality",
+  "xray": "X-ray & CT",
+  "nuclear": "Nuclear imaging",
+  "mri": "MRI",
+  "ultrasound": "Ultrasound",
+  "optical": "Optical imaging",
+  "ai": "AI & deep learning"
+ },
+ "courses": [
+  {
+   "id": "bmed2300",
+   "code": "BMED 2300",
+   "slug": "bio-imaging",
+   "title": "Bio-Imaging and Bio-Instrumentation",
+   "level": "Undergraduate · required for BME",
+   "instructors": "Ge Wang · Hisham Mohamed",
+   "description": "This course serves as an introduction to biomedical imaging, instrumentation and application with focus on data acquisition and image reconstruction. Basic principles of major biomedical imaging modalities and appropriate use of instruments will be covered for solving biomedical problems, such as x-ray radiography, computed tomography, nuclear imaging, magnetic resonance imaging, ultrasounds, and optical imaging.",
+   "facts": [
+    [
+     "Credits",
+     "4 credits · 4 contact hours"
+    ],
+    [
+     "Prerequisite",
+     "PHYS 1200 (Physics II)"
+    ],
+    [
+     "Textbook",
+     "Andrew Webb, Introduction to Biomedical Imaging, IEEE Press"
+    ]
+   ],
+   "syllabus": "assets/BME-ABET-Syllabi-2025-BMED2300.docx",
+   "note": "Slides, the original lecture recording, an AI-avatar video and a transcript for every lecture. Open in ALIVE to take the lecture interactively.",
+   "lectures": [
+    {
+     "n": 1,
+     "title": "Introduction",
+     "topic": "foundations",
+     "alive": "Lecture_01",
+     "slides": "assets/mile-01-intro.pptx",
+     "transcript": "video_script/Introduction.pdf",
+     "avatar": "YSmopEoxA00",
+     "recording": "bZ42HZ3cQYs"
+    },
+    {
+     "n": 2,
+     "title": "MatLab I (Basics)",
+     "topic": "signals",
+     "alive": "Lecture_02",
+     "slides": "assets/mile-02-matlab1.pptx",
+     "transcript": "video_script/MatLab I.pdf",
+     "avatar": "Z-zxYSQ3BXA",
+     "recording": "ZT-31Yov8OQ"
+    },
+    {
+     "n": 3,
+     "title": "System",
+     "topic": "signals",
+     "alive": "Lecture_03",
+     "slides": "assets/mile-03-system.pptx",
+     "transcript": "video_script/System.pdf",
+     "avatar": "x8EVxZx_2vc",
+     "recording": "ZaoumhPf9U8"
+    },
+    {
+     "n": 4,
+     "title": "Convolution",
+     "topic": "signals",
+     "alive": "Lecture_04",
+     "slides": "assets/mile-04-convolution.pptx",
+     "transcript": "video_script/Convolution.pdf",
+     "avatar": "Ft7DKHj-m4E",
+     "recording": "rIBp6RbznlM"
+    },
+    {
+     "n": 5,
+     "title": "Fourier Series",
+     "topic": "signals",
+     "alive": "Lecture_05",
+     "slides": "assets/mile-05-fourierseries.pptx",
+     "transcript": "video_script/Fourier Series.pdf",
+     "avatar": "lY8dbsHSd-E",
+     "recording": "VQAd0Hp4CaY"
+    },
+    {
+     "n": 6,
+     "title": "Fourier Transform",
+     "topic": "signals",
+     "alive": "Lecture_06",
+     "slides": "assets/mile-06-fouriertransform.pptx",
+     "transcript": "video_script/Fourier Transform.pdf",
+     "avatar": "3Cv33ll8u8g",
+     "recording": "ZTLCKK-pZb8"
+    },
+    {
+     "n": 7,
+     "title": "Signal Processing",
+     "topic": "signals",
+     "alive": "Lecture_07",
+     "slides": "assets/mile-07-signalprocessing.pptx",
+     "transcript": "video_script/Signal Processing.pdf",
+     "avatar": "K9TDOz6F8Ss",
+     "recording": "z0XDEkCzjrs"
+    },
+    {
+     "n": 8,
+     "title": "Discrete FT & FFT",
+     "topic": "signals",
+     "alive": "Lecture_08",
+     "slides": "assets/mile-08-dft-fft.pptx",
+     "transcript": "video_script/FT & FTT.pdf",
+     "avatar": "Fy1C-tLpUSg",
+     "recording": "XX37aqpp0_c"
+    },
+    {
+     "n": 9,
+     "title": "MatLab II (Homework)",
+     "topic": "signals",
+     "alive": "Lecture_09",
+     "slides": "assets/mile-09-matlab2.pptx",
+     "transcript": "video_script/MatLab II.pdf",
+     "avatar": "V2ErYw8mLUQ",
+     "recording": "VdNReLdC1Io"
+    },
+    {
+     "n": 10,
+     "title": "Network",
+     "topic": "signals",
+     "alive": "Lecture_10",
+     "slides": "assets/mile-10-network.pptx",
+     "transcript": "video_script/Network.pdf",
+     "avatar": "r-Q4zBSmngg",
+     "recording": "wG3uuu6d_04"
+    },
+    {
+     "n": 11,
+     "title": "Image Quality",
+     "topic": "quality",
+     "alive": "Lecture_11",
+     "slides": "assets/mile-11-quality.pptx",
+     "transcript": "video_script/Image Quality.pdf",
+     "avatar": "pqjWMhNyxlQ",
+     "recording": "yzgkrXbosQc"
+    },
+    {
+     "n": 12,
+     "title": "X-Ray Physics",
+     "topic": "xray",
+     "alive": "Lecture_12",
+     "slides": "assets/mile-12-x-ray.pptx",
+     "transcript": "video_script/X-Ray Physics.pdf",
+     "avatar": "WcJaGTta3Q4",
+     "recording": "8GJPw_0tkdk"
+    },
+    {
+     "n": 13,
+     "title": "CT Reconstruction",
+     "topic": "xray",
+     "alive": "Lecture_13",
+     "slides": "assets/mile-13-recon.pptx",
+     "transcript": "video_script/CT Reconstruction.pdf",
+     "avatar": "DJEbN5XtatQ",
+     "recording": "q9ZCvQ1ZqjA"
+    },
+    {
+     "n": 14,
+     "title": "CT Scanner",
+     "topic": "xray",
+     "alive": "Lecture_14",
+     "slides": "assets/mile-14-scanner.pptx",
+     "transcript": "video_script/CT Scanner.pdf",
+     "avatar": "MGRalubYzYA",
+     "recording": "P2bZgUyP41c"
+    },
+    {
+     "n": 15,
+     "title": "MatLab III (CT)",
+     "topic": "xray",
+     "alive": "Lecture_15",
+     "slides": "assets/bb15-matlabct.pdf",
+     "transcript": "video_script/MatLab III.pdf",
+     "avatar": "fsq_syxsZeo"
+    },
+    {
+     "n": 16,
+     "title": "Nuclear Physics",
+     "topic": "nuclear",
+     "alive": "Lecture_16",
+     "slides": "assets/mile-16-nuclear.pptx",
+     "transcript": "video_script/Nuclear Physics.pdf",
+     "avatar": "ncTcZHxiCV8",
+     "recording": "booFmLl9dWw"
+    },
+    {
+     "n": 17,
+     "title": "PET & SPECT",
+     "topic": "nuclear",
+     "alive": "Lecture_17",
+     "slides": "assets/mile-17-spect-pet.pptx",
+     "transcript": "video_script/PET & SPECT.pdf",
+     "avatar": "pbmwUCAz7EY",
+     "recording": "CaL_w_bkwjY"
+    },
+    {
+     "n": 18,
+     "title": "MRI I",
+     "topic": "mri",
+     "alive": "Lecture_18",
+     "slides": "assets/bb18-mri-physics.pdf",
+     "transcript": "video_script/MRI I.pdf",
+     "avatar": "eQuotCAI5SU",
+     "recording": "uJVPkqwhu5Q"
+    },
+    {
+     "n": 19,
+     "title": "MRI II",
+     "topic": "mri",
+     "alive": "Lecture_19",
+     "slides": "assets/mile-19-mri-imaging.pptx",
+     "transcript": "video_script/MRI II.pdf",
+     "avatar": "XDnghV5xUgU",
+     "recording": "BO-5-_G7874"
+    },
+    {
+     "n": 20,
+     "title": "MRI III",
+     "topic": "mri",
+     "alive": "Lecture_20",
+     "slides": "assets/mile-20-mri-pulse-seq.pptx",
+     "transcript": "video_script/MRI III.pdf",
+     "avatar": "D-A0jT7bc9k",
+     "recording": "zTDJbbFZuTQ"
+    },
+    {
+     "n": 21,
+     "title": "US I",
+     "topic": "ultrasound",
+     "alive": "Lecture_21",
+     "slides": "assets/mile-21-us-principle.pptx",
+     "transcript": "video_script/US Physics.pdf",
+     "avatar": "LlvMU2BnQ_o",
+     "recording": "6-UAGLl17L4"
+    },
+    {
+     "n": 22,
+     "title": "US II",
+     "topic": "ultrasound",
+     "alive": "Lecture_22",
+     "slides": "undergrad_slides/mile-22-us-ok.pptx",
+     "transcript": "video_script/US Imaging.pdf",
+     "avatar": "_1a6TuMVSak",
+     "recording": "ACRTw66kANw"
+    },
+    {
+     "n": 23,
+     "title": "Optical Imaging",
+     "topic": "optical",
+     "alive": "Lecture_23",
+     "slides": "undergrad_slides/mile-23-optics-ok.pdf",
+     "transcript": "video_script/Optical Imaging.pdf",
+     "avatar": "4D01_GEIqqk",
+     "recording": "hYY8d0UB6Qo"
+    }
+   ]
+  },
+  {
+   "id": "bmed4590",
+   "code": "BMED 4590/6590",
+   "slug": "medical-imaging-graduate",
+   "title": "Medical Imaging",
+   "level": "Undergraduate & graduate elective",
+   "instructors": "Ge Wang",
+   "description": "This course serves as an advanced introduction to medical imaging with a focus on the physical, mathematical, and computational principles underlying modern imaging systems. Fundamental concepts of image formation, tomographic data acquisition, and image reconstruction are covered, along with the design and operation of major imaging modalities such as x-ray computed tomography, magnetic resonance imaging, and related technologies. The course also addresses contemporary artificial intelligence and deep learning methods for medical imaging, including learning-based image reconstruction, image analysis, and emerging clinical and research applications.",
+   "facts": [
+    [
+     "Credits",
+     "4 credits · 4 contact hours"
+    ],
+    [
+     "Prerequisite",
+     "BMED 2300 or equivalent"
+    ],
+    [
+     "Textbooks",
+     "Suetens, Fundamentals of Medical Imaging (2009) · Wang, Zhang, Ye, Mou, Machine Learning for Tomographic Imaging (IOP, 2019)"
+    ],
+    [
+     "Grading",
+     "Participation 10% · Homework 30% · Midterm 30% · Final 30%"
+    ]
+   ],
+   "note": "Lecture materials are delivered on ALIVE to enrolled students. Lecture 1 is a free preview.",
+   "lectures": [
+    {
+     "n": 1,
+     "title": "Medical Imaging",
+     "topic": "foundations",
+     "alive": "MI_G_01",
+     "preview": true
+    },
+    {
+     "n": 2,
+     "title": "X-ray Physics",
+     "topic": "xray",
+     "alive": "MI_G_02"
+    },
+    {
+     "n": 3,
+     "title": "FBP: Parallel- and Fan-Beam Geometry",
+     "topic": "xray",
+     "alive": "MI_G_03"
+    },
+    {
+     "n": 4,
+     "title": "CT Reconstruction: Cone-Beam Approximation",
+     "topic": "xray",
+     "alive": "MI_G_04"
+    },
+    {
+     "n": 5,
+     "title": "CT Reconstruction: Cone-Beam Exact",
+     "topic": "xray",
+     "alive": "MI_G_05"
+    },
+    {
+     "n": 6,
+     "title": "CT Reconstruction: Spiral Cone-Beam",
+     "topic": "xray",
+     "alive": "MI_G_06"
+    },
+    {
+     "n": 7,
+     "title": "Interior Tomography and Photon-Counting CT",
+     "topic": "xray",
+     "alive": "MI_G_07"
+    },
+    {
+     "n": 8,
+     "title": "Nuclear Imaging",
+     "topic": "nuclear",
+     "alive": "MI_G_08"
+    },
+    {
+     "n": 9,
+     "title": "Image Quality I",
+     "topic": "quality",
+     "alive": "MI_G_09"
+    },
+    {
+     "n": 10,
+     "title": "Deep Learning",
+     "topic": "ai",
+     "alive": "MI_G_10"
+    },
+    {
+     "n": 11,
+     "title": "Deep Imaging",
+     "topic": "ai",
+     "alive": "MI_G_11"
+    },
+    {
+     "n": 12,
+     "title": "Deep Denoising",
+     "topic": "ai",
+     "alive": "MI_G_12"
+    },
+    {
+     "n": 13,
+     "title": "MRI Physics",
+     "topic": "mri",
+     "alive": "MI_G_13"
+    },
+    {
+     "n": 14,
+     "title": "Spin-Echo",
+     "topic": "mri",
+     "alive": "MI_G_14"
+    },
+    {
+     "n": 15,
+     "title": "K-Space Theorem",
+     "topic": "mri",
+     "alive": "MI_G_15"
+    },
+    {
+     "n": 16,
+     "title": "More MRI Topics",
+     "topic": "mri",
+     "alive": "MI_G_16"
+    },
+    {
+     "n": 17,
+     "title": "Generative AI Models I",
+     "topic": "ai",
+     "alive": "MI_G_17"
+    },
+    {
+     "n": 18,
+     "title": "Generative AI Models II",
+     "topic": "ai",
+     "alive": "MI_G_18"
+    },
+    {
+     "n": 19,
+     "title": "Generative AI Models III",
+     "topic": "ai",
+     "alive": "MI_G_19"
+    },
+    {
+     "n": 20,
+     "title": "Image Quality II",
+     "topic": "quality",
+     "alive": "MI_G_20"
+    },
+    {
+     "n": 21,
+     "title": "Ultrasound Imaging",
+     "topic": "ultrasound",
+     "alive": "MI_G_21"
+    },
+    {
+     "n": 22,
+     "title": "Optical Imaging",
+     "topic": "optical",
+     "alive": "MI_G_22"
+    },
+    {
+     "n": 23,
+     "title": "Foundation Model I",
+     "topic": "ai",
+     "alive": "MI_G_23"
+    },
+    {
+     "n": 24,
+     "title": "Foundation Model II",
+     "topic": "ai",
+     "alive": "MI_G_24"
+    },
+    {
+     "n": 25,
+     "title": "Foundation Model III",
+     "topic": "ai",
+     "alive": "MI_G_25"
+    }
+   ]
+  }
+ ]
+}
