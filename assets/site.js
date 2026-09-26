@@ -44,7 +44,8 @@
     play()
   }
 
-  const data = await fetch("data/courses.json", { cache: "no-cache" }) // edits show at once.then((r) => r.json())
+  // no-cache: an edit to courses.json shows at once instead of after the 10-minute Pages cache.
+  const data = await fetch("data/courses.json", { cache: "no-cache" }).then((r) => r.json())
   const ALIVE = data.alive
 
   // el("a", {href, class}, "text", child, ...) — text goes in as textContent, never as HTML.
